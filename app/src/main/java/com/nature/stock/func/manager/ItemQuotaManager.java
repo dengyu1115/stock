@@ -1,7 +1,7 @@
 package com.nature.stock.func.manager;
 
 import com.nature.stock.common.ioc.annotation.Injection;
-import com.nature.stock.common.util.CalUtil;
+import com.nature.stock.common.util.RateCalculator;
 import com.nature.stock.func.model.ItemQuota;
 import com.nature.stock.item.manager.ItemGroupManager;
 import com.nature.stock.item.manager.KlineManager;
@@ -77,8 +77,8 @@ public class ItemQuotaManager {
         double rateHigh = (latest - high) / high;
         double rateLow = (latest - low) / low;
         double rateAvg = (latest - avg) / avg;
-        double rateLH = CalUtil.maxUp(ks, getPrice);
-        double rateHL = CalUtil.maxDown(ks, getPrice);
+        double rateLH = RateCalculator.max(ks, getPrice);
+        double rateHL = RateCalculator.min(ks, getPrice);
         double ratioLow = (high - low) == 0 ? 1d : (latest - low) / (high - low);
         double ratioAvg = (high - low) == 0 ? 1d : (avg - low) / (high - low);
         quota.setDateStart(getDate.apply(ks.get(0)));
