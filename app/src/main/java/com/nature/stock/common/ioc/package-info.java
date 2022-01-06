@@ -1,1 +1,0 @@
-package com.nature.stock.common.ioc;

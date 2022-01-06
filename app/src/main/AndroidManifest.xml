@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.nature.stock">
+          xmlns:tools="http://schemas.android.com/tools" package="com.nature">
 
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -12,35 +12,44 @@
     <application android:icon="@drawable/app_icon"
                  android:label="@string/app_name"
                  android:supportsRtl="true"
-                 android:theme="@style/AppTheme"
+                 android:theme="@style/FullScreen"
                  android:launchMode="standard"
                  android:usesCleartextTraffic="true"
                  android:requestLegacyExternalStorage="true"
                  tools:ignore="AllowBackup">
-        <activity android:name="com.nature.stock.common.activity.MainActivity" android:exported="true">
+        <activity android:name=".common.activity.MainActivity" android:screenOrientation="landscape"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.nature.stock.common.activity.TaskListActivity"/>
-        <activity android:name="com.nature.stock.common.activity.LineActivity"/>
-        <activity android:name="com.nature.stock.common.activity.TaskManageActivity"/>
-        <activity android:name="com.nature.stock.func.activity.RateDefActivity"/>
-        <activity android:name="com.nature.stock.func.activity.ItemQuotaListActivity"/>
-        <activity android:name="com.nature.stock.func.activity.FundLineActivity"/>
-        <activity android:name="com.nature.stock.func.activity.MarkListActivity"/>
-        <activity android:name="com.nature.stock.func.activity.TargetListActivity"/>
-        <activity android:name="com.nature.stock.func.activity.IndexQuotaListActivity"/>
-        <activity android:name="com.nature.stock.item.activity.KlineListActivity"/>
-        <activity android:name="com.nature.stock.item.activity.KlineActivity"/>
-        <activity android:name="com.nature.stock.item.activity.BuySellListActivity"/>
-        <activity android:name="com.nature.stock.item.activity.ItemGroupActivity"/>
-        <activity android:name="com.nature.stock.item.activity.QuotaActivity"/>
-        <activity android:name="com.nature.stock.item.activity.GroupListActivity"/>
-        <activity android:name="com.nature.stock.item.activity.ItemListActivity"/>
-        <activity android:name="com.nature.stock.common.activity.WorkdayActivity"/>
-        <service android:name="com.nature.stock.common.service.TaskService"/>
+        <service android:name=".common.service.TaskService"/>
+        <activity android:name=".func.activity.TaskListActivity"/>
+        <activity android:name=".func.activity.TaskManageActivity"/>
+        <activity android:name=".func.activity.WorkdayActivity"/>
+        <activity android:name=".func.activity.LineActivity"/>
+        <activity android:name=".stock.activity.ItemListActivity"/>
+        <activity android:name=".stock.activity.PriceListActivity"/>
+        <activity android:name=".stock.activity.PriceDetailActivity"/>
+        <activity android:name=".stock.activity.NetListActivity"/>
+        <activity android:name=".stock.activity.NetDetailActivity"/>
+        <activity android:name=".stock.activity.KlineListActivity"/>
+        <activity android:name=".stock.activity.KlineDetailActivity"/>
+        <activity android:name=".stock.activity.KlineViewActivity"/>
+        <activity android:name=".func.activity.RateDefActivity"/>
+        <activity android:name=".func.activity.ItemQuotaListActivity"/>
+        <activity android:name=".func.activity.FundLineActivity"/>
+        <activity android:name=".func.activity.MarkListActivity"/>
+        <activity android:name=".func.activity.TargetListActivity"/>
+        <activity android:name=".func.activity.IndexQuotaListActivity"/>
+        <activity android:name=".func.activity.FundRateActivity"/>
+        <activity android:name=".item.activity.KlineListActivity"/>
+        <activity android:name=".item.activity.BuySellListActivity"/>
+        <activity android:name=".item.activity.ItemGroupActivity"/>
+        <activity android:name=".item.activity.QuotaActivity"/>
+        <activity android:name=".item.activity.GroupListActivity"/>
+        <activity android:name=".item.activity.ItemListActivity"/>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        applicationId "com.nature.stock"
+        applicationId "com.nature"
         minSdkVersion 29
         targetSdkVersion 31
         versionCode 1
@@ -30,7 +30,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'com.alibaba:fastjson:1.2.78'
+    implementation 'com.alibaba:fastjson:1.2.79'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'org.projectlombok:lombok:1.18.22'
