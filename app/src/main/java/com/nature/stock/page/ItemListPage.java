@@ -1,11 +1,14 @@
-package com.nature.stock.activity;
+package com.nature.stock.page;
 
 import android.widget.Button;
 import android.widget.EditText;
-import com.nature.common.activity.BaseListActivity;
 import com.nature.common.enums.Market;
 import com.nature.common.ioc.holder.InstanceHolder;
-import com.nature.common.util.*;
+import com.nature.common.page.ListPage;
+import com.nature.common.util.ClickUtil;
+import com.nature.common.util.PopUtil;
+import com.nature.common.util.Sorter;
+import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.SearchBar;
 import com.nature.stock.manager.ItemManager;
@@ -14,7 +17,7 @@ import com.nature.stock.model.Item;
 import java.util.Arrays;
 import java.util.List;
 
-public class ItemListActivity extends BaseListActivity<Item> {
+public class ItemListPage extends ListPage<Item> {
 
     private final ItemManager itemManager = InstanceHolder.get(ItemManager.class);
     private final List<ExcelView.D<Item>> ds = Arrays.asList(

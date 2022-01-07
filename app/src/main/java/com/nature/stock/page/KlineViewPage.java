@@ -1,13 +1,11 @@
-package com.nature.stock.activity;
+package com.nature.stock.page;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import com.alibaba.fastjson.JSON;
+import android.widget.LinearLayout;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.page.Page;
 import com.nature.common.util.TextUtil;
-import com.nature.common.util.ViewUtil;
 import com.nature.common.view.LView;
 import com.nature.stock.manager.KlineManager;
 import com.nature.stock.model.Item;
@@ -20,7 +18,7 @@ import java.util.List;
 import static com.nature.common.view.LView.C;
 import static com.nature.common.view.LView.Q;
 
-public class KlineViewActivity extends AppCompatActivity {
+public class KlineViewPage extends Page {
 
     private static final int[] COLORS = new int[]{0xFFFF0000, 0xFF1E90FF, 0xFF32CD32, 0xFFEEEE00, 0xFF8E388E};
     private static final List<List<Q<Kline>>> QS = Arrays.asList(
@@ -55,20 +53,21 @@ public class KlineViewActivity extends AppCompatActivity {
 
     private final KlineManager klineManager = InstanceHolder.get(KlineManager.class);
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LView<Kline> view = new LView<>(this);
-        view.init(COLORS, QS, RS, Kline::getDate, new Kline());
-        view.data(this.data());
-        this.setContentView(view);
-        ViewUtil.initActivity(this);
-    }
+    private LView<Kline> view;
 
     private List<Kline> data() {
-        Item item = JSON.parseObject(this.getIntent().getStringExtra("data"), Item.class);
+        Item item = this.getParam();
         return klineManager.list(item.getCode(), item.getMarket());
     }
 
+    @Override
+    protected void makeStructure(LinearLayout page, Context context) {
+        page.addView(view = new LView<>(context));
+        view.init(COLORS, QS, RS, Kline::getDate, new Kline());
+    }
+
+    @Override
+    protected void onShow() {
+        view.data(this.data());
+    }
 }

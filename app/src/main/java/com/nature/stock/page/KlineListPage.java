@@ -1,10 +1,9 @@
-package com.nature.stock.activity;
+package com.nature.stock.page;
 
-import android.content.Intent;
 import android.widget.EditText;
-import com.alibaba.fastjson.JSON;
-import com.nature.common.activity.BaseListActivity;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.page.ListPage;
+import com.nature.common.page.Page;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
@@ -18,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class KlineListActivity extends BaseListActivity<Kline> {
+public class KlineListPage extends ListPage<Kline> {
 
     private final KlineManager klineManager = InstanceHolder.get(KlineManager.class);
     private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
@@ -68,18 +67,16 @@ public class KlineListActivity extends BaseListActivity<Kline> {
     }
 
     private Consumer<Kline> detail() {
-        return this.consume(KlineDetailActivity.class);
+        return this.consume(KlineDetailPage.class);
     }
 
     private Consumer<Kline> view() {
-        return this.consume(KlineViewActivity.class);
+        return this.consume(KlineViewPage.class);
     }
 
-    private Consumer<Kline> consume(Class<?> clz) {
+    private Consumer<Kline> consume(Class<? extends Page> clz) {
         return d -> {
-            Intent intent = new Intent(context, clz);
-            intent.putExtra("data", JSON.toJSONString(d));
-            this.startActivity(intent);
+            this.show(clz, d);
         };
     }
 

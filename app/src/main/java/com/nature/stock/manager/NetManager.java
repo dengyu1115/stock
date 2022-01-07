@@ -60,12 +60,12 @@ public class NetManager {
         List<Net> list = netKlineHttp.list(code, market, start, end);
         if (!list.isEmpty()) {
             if (net == null) {
+                AvgCalculator.cal(list);
+            } else {
                 List<Net> nets = netMapper.listBefore(code, market, start, 252);
                 Collections.reverse(nets);
                 nets.addAll(list);
                 AvgCalculator.cal(nets);
-            } else {
-                AvgCalculator.cal(list);
             }
         }
         return this.batchMerge(list);

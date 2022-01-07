@@ -1,8 +1,7 @@
-package com.nature.stock.activity;
+package com.nature.stock.page;
 
-import com.alibaba.fastjson.JSON;
-import com.nature.common.activity.BaseListActivity;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.page.ListPage;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
@@ -16,7 +15,7 @@ import com.nature.stock.model.Net;
 import java.util.Arrays;
 import java.util.List;
 
-public class NetDetailActivity extends BaseListActivity<Net> {
+public class NetDetailPage extends ListPage<Net> {
 
     private final NetManager netManager = InstanceHolder.get(NetManager.class);
     private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
@@ -57,7 +56,7 @@ public class NetDetailActivity extends BaseListActivity<Net> {
 
     @Override
     protected void initHeaderBehaviours() {
-        this.item = JSON.parseObject(this.getIntent().getStringExtra("data"), Item.class);
+        this.item = this.getParam();
         List<String> list = workDayManager.listWorkDays(workDayManager.getLatestWorkDay());
         list.add(0, "");
         start.mapper(s -> s).init().refreshData(list);

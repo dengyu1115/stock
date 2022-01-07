@@ -15,7 +15,7 @@ import com.nature.common.view.Selector;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.item.manager.KlineManager;
 import com.nature.item.model.Kline;
-import com.nature.stock.activity.KlineViewActivity;
+import com.nature.stock.page.KlineViewPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +50,7 @@ public class KlineListActivity extends BaseListActivity<Kline> {
 
     private Consumer<Kline> getConsumer() {
         return d -> {
-            Intent intent = new Intent(getApplicationContext(), KlineViewActivity.class);
+            Intent intent = new Intent(getApplicationContext(), KlineViewPage.class);
             intent.putExtra("code", d.getCode());
             intent.putExtra("market", d.getMarket());
             this.startActivity(intent);

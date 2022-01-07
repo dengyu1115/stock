@@ -22,7 +22,7 @@ import com.nature.item.manager.GroupManager;
 import com.nature.item.manager.ItemManager;
 import com.nature.item.model.Group;
 import com.nature.item.model.Item;
-import com.nature.stock.activity.KlineViewActivity;
+import com.nature.stock.page.KlineViewPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -170,7 +170,7 @@ public class PriceNetListActivity extends BaseListActivity<PriceNet> {
 
     private Consumer<PriceNet> kline() {
         return d -> {
-            Intent intent = new Intent(context, KlineViewActivity.class);
+            Intent intent = new Intent(context, KlineViewPage.class);
             intent.putExtra("market", this.getMarket(d.getCode()));
             intent.putExtra("code", d.getCode());
             this.startActivity(intent);

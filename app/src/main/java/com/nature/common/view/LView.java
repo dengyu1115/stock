@@ -27,7 +27,7 @@ public class LView<T> extends View {
     private T curr;
     private List<String> dateTexts;
     private int intervalDate, index, listSize = sizeDefault, listStart, listEnd;
-    private float unitDate, px, lx, ly;
+    private float unitDate, dx, lx, ly;
     private boolean longPressed, moving;
 
     public LView(Context context) {
@@ -80,37 +80,45 @@ public class LView<T> extends View {
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
         if (action == MotionEvent.ACTION_DOWN) {
-            ly = event.getY();
-            lx = event.getX();
-        } else if (action == MotionEvent.ACTION_POINTER_DOWN) {
-            px = event.getX();
-            if (px > lx) {
-                float x = lx;
-                lx = px;
-                px = x;
-            }
+            this.actionDown(event);
         } else if (action == MotionEvent.ACTION_UP) {
-            longPressed = false;
-            moving = false;
+            this.actionUp(event);
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if (event.getPointerCount() == 2) { // 双指操作放大缩小
-                if (this.doScaleList(event)) {
-                    return true;
-                }
-            } else {
-                if (this.doLongPress(event)) {
-                    return true;    // 长按处理
-                }
-                if (longPressed) {  // 长按移动下标
-                    if (this.doMoveIndex(event)) {
-                        return true;
-                    }
-                } else if (this.doMoveList(event)) {
-                    return true;  // 非长按滑动列表
-                }
-            }
+            this.actionMove(event);    // 长按处理
         }
         return true;
+    }
+
+    private void actionMove(MotionEvent event) {
+        if (event.getPointerCount() == 2) { // 双指操作放大缩小
+            this.doScaleList(event);
+        } else {
+            if (!moving) {
+                float mx = Math.abs(event.getX() - lx);
+                float my = Math.abs(event.getY() - ly);
+                if (mx < 10 && my < 10) {
+                    longPressed = (event.getEventTime() - event.getDownTime()) > 500L;
+                } else {
+                    moving = true;
+                }
+            }
+            if (longPressed) {  // 长按移动下标
+                this.doMoveIndex(event);
+            } else if (moving) {
+                this.doMoveList(event);
+            }
+        }
+    }
+
+    private void actionUp(MotionEvent event) {
+        longPressed = false;
+        moving = false;
+        dx = 0;
+    }
+
+    private void actionDown(MotionEvent event) {
+        ly = event.getY();
+        lx = event.getX();
     }
 
     @Override
@@ -129,42 +137,100 @@ public class LView<T> extends View {
         this.drawBase(canvas);
     }
 
-    private boolean doLongPress(MotionEvent event) {
-        float x = event.getX(), y = event.getY();
-        float mx = Math.abs(x - lx);
-        float my = Math.abs(y - ly);
-        if (mx < 10 && my < 10) {
-            if (!moving && !longPressed) {
-                longPressed = (event.getEventTime() - event.getDownTime()) > 500L;
-            }
-            if (longPressed) {
-                this.doMoveIndex(event);
-            }
-            return true;
-        } else {
-            moving = !longPressed;
+    private void doScaleList(MotionEvent event) {
+        float dx = Math.abs(event.getX(0) - event.getX(1));
+        if (this.dx == 0) {
+            this.dx = dx;
+            return;
         }
-        return false;
+        float diff = this.dx - dx;
+        if (diff == 0) {
+            return;
+        }
+        this.dx = dx;
+        if (Math.abs(diff) > 200) {
+            return;
+        }
+        if (diff < 0) { // 缩小
+            if (listSize <= sizeMin) {
+                return;
+            }
+            int unit = this.moveUnit(-diff);
+            if (unit == 0) {
+                return;
+            }
+            listSize -= unit;
+            if (listSize < sizeMin) {
+                unit -= sizeMin - listSize;
+                listSize = sizeMin;
+            }
+            listStart += unit / 2;
+            listEnd -= unit - unit / 2;
+        } else {
+            int size = this.data.size();
+            int sizeMax = Math.min(this.sizeMax, size);
+            if (listSize >= sizeMax) {
+                return;
+            }
+            int unit = this.moveUnit(diff);
+            if (unit == 0) {
+                return;
+            }
+            listSize += unit;
+            if (listSize > sizeMax) {
+                unit -= listSize - sizeMax;
+                listSize = sizeMax;
+            }
+            listStart -= unit / 2;
+            if (listStart < 0) {
+                listEnd += unit - unit / 2 - listStart;
+                listStart = 0;
+            } else {
+                listEnd += unit - unit / 2;
+                if (listEnd > size) {
+                    listStart -= listEnd - size;
+                    listEnd = size;
+                }
+            }
+        }
+        list = data.subList(listStart, listEnd);
+        index = list.size() - 1;
+        this.curr = this.list.get(index);
+        this.invalidate();
     }
 
-    private boolean doMoveList(MotionEvent event) {
+    private void doMoveIndex(MotionEvent event) {
         float x = event.getX(), y = event.getY();
         if (x < rect.sx - unitDate / 2f || x > rect.ex + unitDate / 2f || y < rect.sy || y > rect.ey) {
-            return true;
+            return;
+        }
+        int index = Math.round((x - rect.sx) / unitDate);
+        if (this.index == index) {
+            return;
+        }
+        this.index = index;
+        this.curr = this.list.get(this.index);
+        this.invalidate();
+    }
+
+    private void doMoveList(MotionEvent event) {
+        float x = event.getX(), y = event.getY();
+        if (x < rect.sx - unitDate / 2f || x > rect.ex + unitDate / 2f || y < rect.sy || y > rect.ey) {
+            return;
         }
         float diff = x - this.lx;
         if (diff == 0) {
-            return true;
+            return;
         }
         this.lx = x;
         int size = this.data.size();
         if (diff < 0) {
             if (this.listEnd == size) {
-                return true;
+                return;
             }
             int unit = this.moveUnit(-diff);
             if (unit == 0) {
-                return true;
+                return;
             }
             this.listEnd += unit;
             if (this.listEnd > size) {
@@ -174,11 +240,11 @@ public class LView<T> extends View {
             this.listStart += unit;
         } else {
             if (this.listStart == 0) {
-                return true;
+                return;
             }
             int unit = this.moveUnit(diff);
             if (unit == 0) {
-                return true;
+                return;
             }
             this.listStart -= unit;
             if (this.listStart < 0) {
@@ -191,128 +257,6 @@ public class LView<T> extends View {
         this.index = this.list.size() - 1;
         this.curr = this.list.get(this.index);
         this.invalidate();
-        return false;
-    }
-
-    private boolean doScaleList(MotionEvent event) {
-        float x1 = event.getX(0), y1 = event.getY(0),
-                x2 = event.getX(1), y2 = event.getY(1);
-        if (x1 > x2) {
-            float temp = x1;
-            x1 = x2;
-            x2 = temp;
-            temp = y1;
-            y1 = y2;
-            y2 = temp;
-        }
-        if (this.doScaleLeft(x1, y1) && this.doScaleRight(x2, y2)) {
-            return true;
-        }
-        this.list = this.data.subList(this.listStart, this.listEnd);
-        this.index = this.list.size() - 1;
-        this.curr = this.list.get(this.index);
-        this.invalidate();
-        return false;
-    }
-
-    private boolean doScaleLeft(float x, float y) {
-        if (x < rect.sx - unitDate / 2f || x > rect.ex + unitDate / 2f || y < rect.sy || y > rect.ey) {
-            return true;
-        }
-        float diff = x - px;
-        if (diff == 0) {
-            return true;
-        }
-        this.px = x;
-        int size = this.data.size();
-        if (diff < 0) {
-            if (this.listStart >= (size - sizeMin)) {
-                return true;
-            }
-            int unit = this.moveUnit(-diff);
-            if (unit == 0) {
-                return true;
-            }
-            this.listStart += unit;
-            if (this.listStart > (size - sizeMin)) {
-                unit -= (this.listStart - size + sizeMin);
-                this.listStart = size - sizeMin;
-            }
-            this.listSize -= unit;
-        } else {
-            if (this.listStart == 0) {
-                return true;
-            }
-            int unit = this.moveUnit(diff);
-            if (unit == 0) {
-                return true;
-            }
-            this.listStart -= unit;
-            if (this.listStart < 0) {
-                unit += this.listStart;
-                this.listStart = 0;
-            }
-            this.listSize += unit;
-        }
-        return false;
-    }
-
-
-    private boolean doScaleRight(float x, float y) {
-        if (x < rect.sx - unitDate / 2f || x > rect.ex + unitDate / 2f || y < rect.sy || y > rect.ey) {
-            return true;
-        }
-        float diff = x - lx;
-        if (diff == 0) {
-            return true;
-        }
-        this.lx = x;
-        int size = this.data.size();
-        if (diff < 0) {
-            if (this.listEnd >= size) {
-                return true;
-            }
-            int unit = this.moveUnit(-diff);
-            if (unit == 0) {
-                return true;
-            }
-            this.listEnd += unit;
-            if (this.listEnd > size) {
-                unit -= (size - this.listEnd);
-                this.listEnd = size;
-            }
-            this.listSize += unit;
-        } else {
-            if (this.listEnd <= this.listStart + sizeMin) {
-                return true;
-            }
-            int unit = this.moveUnit(diff);
-            if (unit == 0) {
-                return true;
-            }
-            this.listEnd -= unit;
-            if (this.listEnd < this.listStart + sizeMin) {
-                unit -= (this.listStart + sizeMin - this.listEnd);
-                this.listEnd = this.listStart + sizeMin;
-            }
-            this.listSize -= unit;
-        }
-        return false;
-    }
-
-    private boolean doMoveIndex(MotionEvent event) {
-        float x = event.getX(), y = event.getY();
-        if (x < rect.sx - unitDate / 2f || x > rect.ex + unitDate / 2f || y < rect.sy || y > rect.ey) {
-            return true;
-        }
-        int index = Math.round((x - rect.sx) / unitDate);
-        if (this.index == index) {
-            return true;
-        }
-        this.index = index;
-        this.curr = this.list.get(this.index);
-        this.invalidate();
-        return false;
     }
 
     private int moveUnit(float diff) {

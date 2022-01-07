@@ -1,11 +1,9 @@
-package com.nature.stock.activity;
+package com.nature.stock.page;
 
-import android.content.Intent;
 import android.widget.Button;
 import android.widget.EditText;
-import com.alibaba.fastjson.JSON;
-import com.nature.common.activity.BaseListActivity;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.page.ListPage;
 import com.nature.common.util.ClickUtil;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.PopUtil;
@@ -21,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PriceListActivity extends BaseListActivity<Price> {
+public class PriceListPage extends ListPage<Price> {
 
     private final PriceManager priceManager = InstanceHolder.get(PriceManager.class);
     private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
@@ -81,9 +79,7 @@ public class PriceListActivity extends BaseListActivity<Price> {
 
     private Consumer<Price> detail() {
         return d -> {
-            Intent intent = new Intent(context, PriceDetailActivity.class);
-            intent.putExtra("data", JSON.toJSONString(d));
-            this.startActivity(intent);
+            this.show(PriceDetailPage.class, d);
         };
     }
 

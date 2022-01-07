@@ -26,7 +26,7 @@ import com.nature.item.manager.ItemManager;
 import com.nature.item.model.Group;
 import com.nature.item.model.Item;
 import com.nature.item.model.ItemGroup;
-import com.nature.stock.activity.KlineViewActivity;
+import com.nature.stock.page.KlineViewPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -182,7 +182,7 @@ public class ItemGroupActivity extends AppCompatActivity {
 
     private Consumer<Item> toKlineView() {
         return d -> {
-            Intent intent = new Intent(getApplicationContext(), KlineViewActivity.class);
+            Intent intent = new Intent(getApplicationContext(), KlineViewPage.class);
             intent.putExtra("code", d.getCode());
             intent.putExtra("market", d.getMarket());
             this.startActivity(intent);

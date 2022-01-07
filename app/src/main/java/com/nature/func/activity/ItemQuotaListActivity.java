@@ -20,7 +20,7 @@ import com.nature.func.manager.ItemQuotaManager;
 import com.nature.func.model.ItemQuota;
 import com.nature.item.manager.GroupManager;
 import com.nature.item.model.Group;
-import com.nature.stock.activity.KlineViewActivity;
+import com.nature.stock.page.KlineViewPage;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -114,7 +114,7 @@ public class ItemQuotaListActivity extends BaseListActivity<ItemQuota> {
                 intent = new Intent(context, FundLineActivity.class);
                 intent.putExtra("fund", JSON.toJSONString(d));
             } else {
-                intent = new Intent(context, KlineViewActivity.class);
+                intent = new Intent(context, KlineViewPage.class);
                 intent.putExtra("market", d.getMarket());
                 intent.putExtra("code", d.getCode());
             }

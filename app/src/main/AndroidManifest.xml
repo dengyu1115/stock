@@ -29,14 +29,6 @@
         <activity android:name=".func.activity.TaskManageActivity"/>
         <activity android:name=".func.activity.WorkdayActivity"/>
         <activity android:name=".func.activity.LineActivity"/>
-        <activity android:name=".stock.activity.ItemListActivity"/>
-        <activity android:name=".stock.activity.PriceListActivity"/>
-        <activity android:name=".stock.activity.PriceDetailActivity"/>
-        <activity android:name=".stock.activity.NetListActivity"/>
-        <activity android:name=".stock.activity.NetDetailActivity"/>
-        <activity android:name=".stock.activity.KlineListActivity"/>
-        <activity android:name=".stock.activity.KlineDetailActivity"/>
-        <activity android:name=".stock.activity.KlineViewActivity"/>
         <activity android:name=".func.activity.RateDefActivity"/>
         <activity android:name=".func.activity.ItemQuotaListActivity"/>
         <activity android:name=".func.activity.FundLineActivity"/>
