@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 public abstract class Page {
 
+    protected static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
     protected static final int C = 0, S = 1, E = 2;
     private LinearLayout page;
     private BasicPage basic;

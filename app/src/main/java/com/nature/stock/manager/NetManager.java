@@ -2,7 +2,6 @@ package com.nature.stock.manager;
 
 import com.nature.common.calculator.AvgCalculator;
 import com.nature.common.constant.Constant;
-import com.nature.common.db.DB;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.ExeUtil;
@@ -18,8 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 public class NetManager {
-
-    private static final int BATCH_SIZE = 70;
 
     @Injection
     private NetKlineHttp netKlineHttp;
@@ -68,23 +65,18 @@ public class NetManager {
                 AvgCalculator.cal(nets);
             }
         }
-        return this.batchMerge(list);
+        return netMapper.batchMerge(list);
     }
 
     private int reload(Item item) {
         String start = "", end = DateFormatUtils.format(new Date(), Constant.FORMAT_DAY);
         List<Net> list = netKlineHttp.list(item.getCode(), item.getMarket(), start, end);
         AvgCalculator.cal(list);
-        return this.batchMerge(list);
+        return netMapper.batchMerge(list);
     }
 
     private String getLastDate(Net kline) {
         return kline == null ? "" : CommonUtil.addDays(kline.getDate(), 1).replace("-", "");
-    }
-
-    private int batchMerge(List<Net> list) {
-        if (list == null || list.isEmpty()) return 0;
-        return DB.create("nature/stock.db").batchExec(list, BATCH_SIZE, netMapper::batchMerge);
     }
 
 }

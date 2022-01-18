@@ -1,6 +1,5 @@
 package com.nature.stock.manager;
 
-import com.nature.common.db.BaseDB;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.stock.http.BaseStockHttp;
 import com.nature.stock.http.BjStockHttp;
@@ -15,8 +14,6 @@ import java.util.stream.Collectors;
 
 public class ItemManager {
 
-    private static final int BATCH_SIZE = 200;
-
     @Injection
     private ItemMapper itemMapper;
     @Injection
@@ -30,12 +27,7 @@ public class ItemManager {
         List<Item> list = Arrays.asList(szStockHttp, shStockHttp, bjStockHttp)
                 .parallelStream().map(BaseStockHttp::list).flatMap(List::stream).collect(Collectors.toList());
         itemMapper.delete();
-        return this.batchMerge(list);
-    }
-
-    public int batchMerge(List<Item> list) {
-        if (list == null || list.isEmpty()) return 0;
-        return BaseDB.create().batchExec(list, BATCH_SIZE, itemMapper::batchMerge);
+        return itemMapper.batchMerge(list);
     }
 
     public List<Item> list() {
@@ -44,6 +36,13 @@ public class ItemManager {
 
     public List<Item> list(String keyWord) {
         return itemMapper.list(keyWord);
+    }
+
+    public List<Item> list(String group, String keyWord) {
+        if (group == null) {
+            throw new IllegalArgumentException("group is null");
+        }
+        return itemMapper.list(group, keyWord);
     }
 
 }

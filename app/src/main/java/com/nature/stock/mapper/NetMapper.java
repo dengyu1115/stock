@@ -5,6 +5,7 @@ import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.stock.model.Net;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.function.Function;
 
 public class NetMapper {
 
+    private static final int BATCH_SIZE = 70;
     private static final String TABLE = "" +
             "CREATE TABLE IF NOT EXISTS net ( " +
             " code TEXT NOT NULL, " +
@@ -52,6 +54,13 @@ public class NetMapper {
     }
 
     public int batchMerge(List<Net> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return 0;
+        }
+        return db.batchExec(list, BATCH_SIZE, this::doBatchMerge);
+    }
+
+    private int doBatchMerge(List<Net> list) {
         SqlBuilder param = SqlBuilder.build().append("REPLACE INTO net(").append(COLUMNS).append(")VALUES ")
                 .foreach(list, null, null, ",", (d, sqlParam) -> {
                     sqlParam.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", d.getCode(), d.getMarket(), d.getDate(),

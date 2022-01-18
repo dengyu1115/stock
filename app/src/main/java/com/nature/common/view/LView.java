@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.View;
-import com.nature.common.util.TextUtil;
 
 import java.util.*;
 import java.util.function.Function;
@@ -285,7 +284,7 @@ public class LView<T> extends View {
     private void fixAll() {
         int width = this.getWidth();
         int height = this.getHeight();
-        if ((float) width / (float) height > 2f) {   // 宽高比保持4：3
+        if ((float) width / (float) height > 1.8f) {   // 宽高比保持4：3
             all.sy = 0;
             all.ey = height;
             all.sx = (int) (width / 2f - height / 2f * 2f + 0.5f);
@@ -414,7 +413,9 @@ public class LView<T> extends View {
         for (int i = 0; i < dateTexts.size(); i++) {
             // x轴上的文字
             String text = dateTexts.get(i);
-            if (text == null) continue;
+            if (text == null) {
+                continue;
+            }
             float x = rect.sx + i * intervalDate - this.getTextWidth(paint, text) / 2f;
             float y = rect.ey + this.getTextHeight(paint, text) / 2f * 3f + 15;
             canvas.drawText(text, x, y, paint);
@@ -449,7 +450,9 @@ public class LView<T> extends View {
             T k = list.get(i);
             float x = i * unitDate + rect.sx;
             Double d = func.apply(k);
-            if (d == null) continue;
+            if (d == null) {
+                continue;
+            }
             float y = (float) ((min - d) * unit + ey);
             if (!moved) {   // 先移动到第一个点的位置
                 moved = true;
@@ -494,6 +497,7 @@ public class LView<T> extends View {
         private final int scale;
         private final int weight;
         private final List<Function<T, Double>> fs;
+        private final Function<Double, String> formatter;
 
         private int sy;
         private int ey;
@@ -502,10 +506,11 @@ public class LView<T> extends View {
         private Double min;
         private List<String> texts;
 
-        public C(int scale, int weight, List<Function<T, Double>> fs) {
+        public C(int scale, int weight, List<Function<T, Double>> fs, Function<Double, String> formatter) {
             this.scale = scale;
             this.weight = weight;
             this.fs = fs;
+            this.formatter = formatter;
         }
 
         public void fix(int sy, int ey) {
@@ -532,7 +537,7 @@ public class LView<T> extends View {
             }
             this.texts = new ArrayList<>();
             for (int i = 0; i < count; i++) {
-                this.texts.add(TextUtil.amount((first + v * i) / scale));
+                this.texts.add(formatter.apply((first + v * i) / scale));
             }
             this.min = first / scale;
             max = (first + (count - 1) * v) / scale;

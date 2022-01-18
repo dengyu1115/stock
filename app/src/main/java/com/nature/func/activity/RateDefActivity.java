@@ -211,10 +211,15 @@ public class RateDefActivity extends AppCompatActivity {
 
     private void refreshExcel() {
         Definition d = selector.getValue();
-        if (d == null) return;
+        if (d == null) {
+            return;
+        }
         String json = d.getJson();
-        if (StringUtils.isBlank(json)) excel.data(new ArrayList<>());
-        else excel.data(JSON.parseArray(json, RateDef.class));
+        if (StringUtils.isBlank(json)) {
+            excel.data(new ArrayList<>());
+        } else {
+            excel.data(JSON.parseArray(json, RateDef.class));
+        }
     }
 
     private void refreshType() {

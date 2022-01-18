@@ -25,4 +25,6 @@ public class BasicView extends LinearLayout {
     float pxToDp(float px) {
         return px / DENSITY;
     }
+
+
 }

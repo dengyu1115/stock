@@ -1,25 +1,30 @@
 package com.nature.common.page;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 
 public class BasicPage extends LinearLayout {
 
     public static final int C = 0, S = 1, E = 2;
 
-    private final Stack<Page> views;
+    private final Stack<Page> pages;
 
     private final Map<Class<?>, Page> map;
 
     public BasicPage(Context context) {
         super(context);
-        this.views = new Stack<>();
+        this.pages = new Stack<>();
         this.map = new HashMap<>();
+        ViewGroup.LayoutParams params = new LayoutParams(2140, 1080);
+        this.setLayoutParams(params);
     }
 
     public <T extends Page> void show(Class<T> clz) {
@@ -47,23 +52,28 @@ public class BasicPage extends LinearLayout {
     }
 
     public void show(Page page) {
-        views.push(page);
-        this.removeAllViews();
+        this.viewHandle(v -> v.setVisibility(GONE));
         this.addView(page.get());
+        pages.push(page);
         page.onShow();
     }
 
     public int viewSize() {
-        return views.size();
+        return pages.size();
     }
 
     public void dispose() {
-        views.pop();
-        this.removeAllViews();
-        Page page = views.peek();
-        if (page != null) {
-            this.addView(page.get());
+        Page page = pages.pop();
+        this.removeView(page.get());
+        this.viewHandle(v -> v.setVisibility(VISIBLE));
+    }
+
+    private void viewHandle(Consumer<View> consumer) {
+        if (pages.isEmpty()) {
+            return;
         }
+        Page p = pages.peek();
+        consumer.accept(p.get());
     }
 
 }

@@ -1,10 +1,7 @@
 package com.nature.stock.config;
 
 import com.nature.common.page.Page;
-import com.nature.stock.page.ItemListPage;
-import com.nature.stock.page.KlineListPage;
-import com.nature.stock.page.NetListPage;
-import com.nature.stock.page.PriceListPage;
+import com.nature.stock.page.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,7 +20,19 @@ public interface StockPages {
                     put("K线-整合", KlineListPage.class);
                 }
             };
+            Map<String, Class<? extends Page>> mapCent = new LinkedHashMap<String, Class<? extends Page>>() {
+                {
+                    put("分组", GroupListPage.class);
+                }
+            };
+            Map<String, Class<? extends Page>> mapRight = new LinkedHashMap<String, Class<? extends Page>>() {
+                {
+                    put("涨幅配置", RateTypeListPage.class);
+                }
+            };
             add(mapLeft);
+            add(mapCent);
+            add(mapRight);
         }
     };
 }

@@ -1,7 +1,6 @@
 package com.nature.stock.manager;
 
 import com.nature.common.constant.Constant;
-import com.nature.common.db.DB;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.ExeUtil;
@@ -16,8 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 public class PriceManager {
-
-    private static final int BATCH_SIZE = 100;
 
     @Injection
     private PriceKlineHttp priceKlineHttp;
@@ -56,22 +53,17 @@ public class PriceManager {
         Price price = priceMapper.findLatest(code, market);
         String start = this.getLastDate(price), end = DateFormatUtils.format(new Date(), Constant.FORMAT_DAY);
         List<Price> list = priceKlineHttp.list(code, market, start, end);
-        return this.batchMerge(list);
+        return priceMapper.batchMerge(list);
     }
 
     private int reload(Item item) {
         String start = "", end = DateFormatUtils.format(new Date(), Constant.FORMAT_DAY);
         List<Price> list = priceKlineHttp.list(item.getCode(), item.getMarket(), start, end);
-        return this.batchMerge(list);
+        return priceMapper.batchMerge(list);
     }
 
     private String getLastDate(Price kline) {
         return kline == null ? "" : CommonUtil.addDays(kline.getDate(), 1).replace("-", "");
-    }
-
-    private int batchMerge(List<Price> list) {
-        if (list == null || list.isEmpty()) return 0;
-        return DB.create("nature/stock.db").batchExec(list, BATCH_SIZE, priceMapper::batchMerge);
     }
 
 }

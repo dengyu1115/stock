@@ -26,7 +26,7 @@ public class SearchBar extends BasicView {
         conditions = part(1);
         conditions.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         handles = part(5);
-        handles.setGravity(Gravity.CENTER);
+        handles.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
         this.addView(conditions);
         this.addView(handles);
     }

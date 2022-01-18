@@ -14,6 +14,7 @@ import com.nature.stock.model.Kline;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.nature.common.view.LView.C;
 import static com.nature.common.view.LView.Q;
@@ -45,10 +46,22 @@ public class KlineViewPage extends Page {
             )
     );
 
+    public static final List<Function<Kline, Double>> FUNC_PRICE = Arrays.asList(
+            Kline::getPriceLatest,
+            Kline::getPriceOpen,
+            Kline::getPriceHigh,
+            Kline::getPriceLow);
+    public static final List<Function<Kline, Double>> FUNC_NET = Arrays.asList(
+            Kline::getLatest,
+            Kline::getAvgWeek,
+            Kline::getAvgMonth,
+            Kline::getAvgSeason,
+            Kline::getAvgYear);
+    public static final List<Function<Kline, Double>> FUNC_AMOUNT = Collections.singletonList(Kline::getAmount);
     private static final List<C<Kline>> RS = Arrays.asList(
-            new C<>(1000, 3, Arrays.asList(Kline::getPriceLatest, Kline::getPriceOpen, Kline::getPriceHigh, Kline::getPriceLow)),
-            new C<>(1000, 3, Arrays.asList(Kline::getLatest, Kline::getAvgWeek, Kline::getAvgMonth, Kline::getAvgSeason, Kline::getAvgYear)),
-            new C<>(1000, 1, Collections.singletonList(Kline::getAmount))
+            new C<>(1000, 3, FUNC_PRICE, TextUtil::price),
+            new C<>(1000, 3, FUNC_NET, TextUtil::price),
+            new C<>(1000, 1, FUNC_AMOUNT, TextUtil::amount)
     );
 
     private final KlineManager klineManager = InstanceHolder.get(KlineManager.class);

@@ -25,23 +25,6 @@
             </intent-filter>
         </activity>
         <service android:name=".common.service.TaskService"/>
-        <activity android:name=".func.activity.TaskListActivity"/>
-        <activity android:name=".func.activity.TaskManageActivity"/>
-        <activity android:name=".func.activity.WorkdayActivity"/>
-        <activity android:name=".func.activity.LineActivity"/>
-        <activity android:name=".func.activity.RateDefActivity"/>
-        <activity android:name=".func.activity.ItemQuotaListActivity"/>
-        <activity android:name=".func.activity.FundLineActivity"/>
-        <activity android:name=".func.activity.MarkListActivity"/>
-        <activity android:name=".func.activity.TargetListActivity"/>
-        <activity android:name=".func.activity.IndexQuotaListActivity"/>
-        <activity android:name=".func.activity.FundRateActivity"/>
-        <activity android:name=".item.activity.KlineListActivity"/>
-        <activity android:name=".item.activity.BuySellListActivity"/>
-        <activity android:name=".item.activity.ItemGroupActivity"/>
-        <activity android:name=".item.activity.QuotaActivity"/>
-        <activity android:name=".item.activity.GroupListActivity"/>
-        <activity android:name=".item.activity.ItemListActivity"/>
     </application>
 
 </manifest>

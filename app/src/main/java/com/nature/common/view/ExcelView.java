@@ -3,6 +3,7 @@ package com.nature.common.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
@@ -18,9 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static android.graphics.drawable.GradientDrawable.Orientation.RIGHT_LEFT;
+
 @SuppressLint("DefaultLocale")
 public class ExcelView<T> extends BasicView {
 
+    public static final int HEIGHT = 33;
+    public static final int PADDING = 8;
+    public static final int SCROLL_BAR_SIZE = 3;
     private final int columns;
     private List<D<T>> ds;
     private List<T> list = new ArrayList<>();
@@ -76,7 +82,6 @@ public class ExcelView<T> extends BasicView {
         this.setBaselineAligned(true);
         this.setLayoutParams(param);
         this.setOrientation(LinearLayout.VERTICAL);
-        this.addView(this.hDivider());
         this.addView(this.titleView());
         this.addView(this.hDivider());
         this.addView(this.listView());
@@ -86,9 +91,10 @@ public class ExcelView<T> extends BasicView {
         this.colWidth = context.getResources().getDisplayMetrics().widthPixels * widthRate / DENSITY / columns + 0.5f; //  - 2
     }
 
+    @SuppressWarnings("unchecked")
     private LinearLayout titleView() {
-        ArrayList<TextView> titleViews = new ArrayList<>();
-        LinearLayout layout = this.itemView(titleViews);
+        LinearLayout layout = this.itemView();
+        ArrayList<TextView> titleViews = (ArrayList<TextView>) layout.getTag();
         for (int i = 0; i < ds.size(); i++) {
             TextView textView = titleViews.get(i);
             D<T> d = ds.get(i);
@@ -102,20 +108,23 @@ public class ExcelView<T> extends BasicView {
     @SuppressLint("ClickableViewAccessibility")
     private void addSortClickEvent(TextView textView, Comparator<T> comparator, int col) {
         if (comparator == null) return;
-        if (col == 0) textView.setOnClickListener((v) -> {
-            this.comparator = comparator;
-            this.sortCol = col;
-            this.sortClick(v);
-        });
-        else textView.setOnTouchListener((v, event) -> {
-            int action = event.getAction();
-            if (action == MotionEvent.ACTION_DOWN) {
+        if (col == 0) {
+            textView.setOnClickListener((v) -> {
                 this.comparator = comparator;
                 this.sortCol = col;
-                this.sortClicked = true;
-            }
-            return false;
-        });
+                this.sortClick(v);
+            });
+        } else {
+            textView.setOnTouchListener((v, event) -> {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    this.comparator = comparator;
+                    this.sortCol = col;
+                    this.sortClicked = true;
+                }
+                return false;
+            });
+        }
     }
 
     private void sortClick(View v) {
@@ -180,8 +189,9 @@ public class ExcelView<T> extends BasicView {
                     }
                     int x = scrollView.getScrollX();
                     int scrollX = calculateFixScroll(x);
-                    if (oldScrollX != x) oldScrollX = x;
-                    else {
+                    if (oldScrollX != x) {
+                        oldScrollX = x;
+                    } else {
                         scrollView.setOnScrollChangeListener(null);
                         scrollAll(scrollX);
                     }
@@ -217,8 +227,10 @@ public class ExcelView<T> extends BasicView {
     private ListView listView() {
         ListView listView = new ListView(context);
         listView.setLayoutParams(param);
-        listView.setScrollBarSize(0);
+        listView.setScrollBarSize(SCROLL_BAR_SIZE);
         listView.setAdapter(adapter);
+        listView.setDivider(new GradientDrawable(RIGHT_LEFT, new int[]{Color.BLUE, Color.BLUE, Color.BLUE}));
+        listView.setDividerHeight(1);
         listView.setOnScrollChangeListener((v, x, y, ox, oy) -> {
             int count = listView.getChildCount();
             if (childCount < count) {
@@ -234,16 +246,20 @@ public class ExcelView<T> extends BasicView {
     }
 
     private int textAlign(int textAlign) {
-        if (textAlign == 1) return Gravity.START | Gravity.CENTER;
-        else if (textAlign == 2) return Gravity.END | Gravity.CENTER;
-        else return Gravity.CENTER;
+        if (textAlign == 1) {
+            return Gravity.START | Gravity.CENTER;
+        } else if (textAlign == 2) {
+            return Gravity.END | Gravity.CENTER;
+        } else {
+            return Gravity.CENTER;
+        }
     }
 
     private TextView textView() {
         TextView view = new TextView(context);
         view.setWidth(dpToPx(colWidth));
-        view.setHeight(dpToPx(40));
-        view.setPadding(dpToPx(8), 0, dpToPx(8), 0);
+        view.setHeight(dpToPx(HEIGHT));
+        view.setPadding(dpToPx(PADDING), 0, dpToPx(PADDING), 0);
         return view;
     }
 
@@ -255,17 +271,18 @@ public class ExcelView<T> extends BasicView {
         return divider(1, MATCH_PARENT);
     }
 
-    @SuppressLint("ResourceAsColor")
     private View divider(int w, int h) {
         View view = new View(context);
         LayoutParams param = new LayoutParams(w, h);
         view.setLayoutParams(param);
-        view.setBackgroundColor(Color.LTGRAY);
+        view.setBackgroundColor(Color.BLUE);
         return view;
     }
 
-    private LinearLayout itemView(List<TextView> textViews) {
+    private LinearLayout itemView() {
+        ArrayList<TextView> textViews = new ArrayList<>();
         LinearLayout line = this.line();
+        line.setTag(textViews);
         HorizontalScrollView scrollView = this.horizontalScrollView();
         scrollView.setOnScrollChangeListener(scrollChangeListener);
         LinearLayout innerLine = this.line();
@@ -280,18 +297,20 @@ public class ExcelView<T> extends BasicView {
                 line.addView(content);
                 line.addView(vDivider());
                 line.addView(scrollView);
-            } else if (i < size - 1) {
+            } else if (i == size - 1) {
                 innerLine.addView(content);
-                innerLine.addView(vDivider());
             } else {
                 innerLine.addView(content);
+                innerLine.addView(vDivider());
             }
         }
         return line;
     }
 
     private void scrollAll(int x) {
-        for (HorizontalScrollView v : horizontalScrollViews) v.scrollTo(x, 0);
+        for (HorizontalScrollView v : horizontalScrollViews) {
+            v.scrollTo(x, 0);
+        }
     }
 
     public static class D<T> {
@@ -354,9 +373,7 @@ public class ExcelView<T> extends BasicView {
         @SuppressWarnings("unchecked")
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                ArrayList<TextView> textViews = new ArrayList<>();
-                convertView = itemView(textViews);
-                convertView.setTag(textViews);
+                convertView = itemView();
             }
             List<TextView> textViews = (List<TextView>) convertView.getTag();
             T item = getItem(position);
@@ -365,7 +382,9 @@ public class ExcelView<T> extends BasicView {
                 D<T> d = ds.get(i);
                 textView.setText(d.content.apply(item));
                 textView.setGravity(textAlign(d.contentAlign));
-                if (d.click != null) textView.setOnClickListener(v -> d.click.accept(item));
+                if (d.click != null) {
+                    textView.setOnClickListener(v -> d.click.accept(item));
+                }
             }
             return convertView;
         }

@@ -5,6 +5,7 @@ import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.stock.model.Price;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.function.Function;
 
 public class PriceMapper {
 
+    private static final int BATCH_SIZE = 100;
     private static final String TABLE = "" +
             "CREATE TABLE IF NOT EXISTS price ( " +
             " code TEXT NOT NULL, " +
@@ -47,6 +49,13 @@ public class PriceMapper {
     }
 
     public int batchMerge(List<Price> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return 0;
+        }
+        return db.batchExec(list, BATCH_SIZE, this::doBatchMerge);
+    }
+
+    private int doBatchMerge(List<Price> list) {
         SqlBuilder param = SqlBuilder.build().append("REPLACE INTO price(").append(COLUMNS).append(")VALUES ")
                 .foreach(list, null, null, ",", (d, sqlParam) -> {
                     sqlParam.append("(?, ?, ?, ?, ?, ?, ?, ?, ?)", d.getCode(), d.getMarket(), d.getDate(),
