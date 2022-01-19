@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nature.common.util.ClickUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -50,6 +51,7 @@ public class ExcelView<T> extends BasicView {
     private int sortCol;
     private boolean sortClicked;
     private float clickX, clickY;
+    private int titleGroup, titleCol;
     private final OnScrollChangeListener scrollChangeListener = (v, x, y, ox, oy) -> this.scrollAll(this.scrollX = x);
 
     public ExcelView(Context context) {
@@ -93,22 +95,95 @@ public class ExcelView<T> extends BasicView {
 
     @SuppressWarnings("unchecked")
     private LinearLayout titleView() {
-        LinearLayout layout = this.itemView();
-        ArrayList<TextView> titleViews = (ArrayList<TextView>) layout.getTag();
-        for (int i = 0; i < ds.size(); i++) {
-            TextView textView = titleViews.get(i);
-            D<T> d = ds.get(i);
-            textView.setText(d.title);
-            this.addSortClickEvent(textView, d.sort, i);
-            textView.setGravity(textAlign(d.titleAlign));
+        LinearLayout line = this.line();
+        HorizontalScrollView scrollView = this.horizontalScrollView();
+        scrollView.setOnScrollChangeListener(scrollChangeListener);
+        LinearLayout innerLine = this.line();
+        scrollView.addView(innerLine);
+        horizontalScrollViews.add(scrollView);
+        this.scrollFix(scrollView);
+        for (D<T> d : ds) {
+            List<D<T>> ds = d.ds;
+            if (ds == null || ds.isEmpty()) {
+                TextView content = this.titleView(d);
+                if (titleGroup == 0) {
+                    line.addView(content);
+                    line.addView(vDivider());
+                    line.addView(scrollView);
+                } else if (titleGroup == this.ds.size() - 1) {
+                    innerLine.addView(content);
+                } else {
+                    innerLine.addView(content);
+                    innerLine.addView(vDivider());
+                }
+            } else {
+                if (StringUtils.isNotBlank(d.title)) {
+                    LinearLayout rect = this.rect(d.title, d.titleAlign, d.ds);
+                    if (titleGroup == 0) {
+                        line.addView(rect);
+                        line.addView(vDivider());
+                        line.addView(scrollView);
+                    } else if (titleGroup == this.ds.size() - 1) {
+                        innerLine.addView(rect);
+                    } else {
+                        innerLine.addView(rect);
+                        innerLine.addView(vDivider());
+                    }
+                } else if (titleGroup == 0) {
+                    int j = 0;
+                    for (D<T> td : ds) {
+                        TextView content = this.titleView(td);
+                        if (j == ds.size() - 1) {
+                            line.addView(content);
+                            line.addView(vDivider());
+                            line.addView(scrollView);
+                        } else {
+                            line.addView(content);
+                            line.addView(vDivider());
+                        }
+                        j++;
+                    }
+                } else if (titleGroup == this.ds.size() - 1) {
+                    int j = 0;
+                    for (D<T> td : ds) {
+                        TextView content = this.titleView(td);
+                        if (j == ds.size() - 1) {
+                            innerLine.addView(content);
+                            innerLine.addView(vDivider());
+                        } else {
+                            innerLine.addView(content);
+                        }
+                        j++;
+                    }
+                } else {
+                    for (D<T> td : ds) {
+                        TextView content = this.titleView(td);
+                        innerLine.addView(content);
+                        innerLine.addView(vDivider());
+                    }
+                }
+
+            }
+            titleGroup++;
         }
-        return layout;
+        return line;
+    }
+
+    private TextView titleView(D<T> td) {
+        TextView textView = textView();
+        textView.setText(td.title);
+        textView.setGravity(this.textAlign(td.titleAlign));
+        this.addSortClickEvent(textView, td.sort);
+        return textView;
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void addSortClickEvent(TextView textView, Comparator<T> comparator, int col) {
-        if (comparator == null) return;
-        if (col == 0) {
+    private void addSortClickEvent(TextView textView, Comparator<T> comparator) {
+        if (comparator == null) {
+            return;
+        }
+        int col = titleCol++;
+        if (this.titleGroup == 0) {
             textView.setOnClickListener((v) -> {
                 this.comparator = comparator;
                 this.sortCol = col;
@@ -217,6 +292,32 @@ public class ExcelView<T> extends BasicView {
         return line;
     }
 
+    private LinearLayout rect(String text, int align, List<D<T>> ds) {
+        LinearLayout line = new LinearLayout(context);
+        line.setLayoutParams(new LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
+        line.setOrientation(VERTICAL);
+        TextView textView = this.textView();
+        textView.setWidth(ds.size() * dpToPx(colWidth));
+        textView.setHeight(dpToPx(HEIGHT / 2f) - 1);
+        textView.setText(text);
+        textView.setGravity(textAlign(align));
+        line.addView(textView);
+        line.addView(hDivider());
+        LinearLayout bottom = new LinearLayout(context);
+        bottom.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+        line.addView(bottom);
+        int i = 0;
+        for (D<T> d : ds) {
+            TextView content = this.titleView(d);
+            if (i != 0) {
+                bottom.addView(vDivider());
+            }
+            bottom.addView(content);
+            i++;
+        }
+        return line;
+    }
+
     private HorizontalScrollView horizontalScrollView() {
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(context);
         horizontalScrollView.setLayoutParams(param);
@@ -279,8 +380,8 @@ public class ExcelView<T> extends BasicView {
         return view;
     }
 
-    private LinearLayout itemView() {
-        ArrayList<TextView> textViews = new ArrayList<>();
+    private LinearLayout contentView() {
+        List<View> textViews = new ArrayList<>();
         LinearLayout line = this.line();
         line.setTag(textViews);
         HorizontalScrollView scrollView = this.horizontalScrollView();
@@ -291,17 +392,54 @@ public class ExcelView<T> extends BasicView {
         this.scrollFix(scrollView);
         int size = ds.size();
         for (int i = 0; i < size; i++) {
-            TextView content = textView();
-            textViews.add(content);
-            if (i == 0) {
-                line.addView(content);
-                line.addView(vDivider());
-                line.addView(scrollView);
-            } else if (i == size - 1) {
-                innerLine.addView(content);
+            D<T> d = ds.get(i);
+            List<D<T>> ds = d.ds;
+            if (ds == null || ds.isEmpty()) {
+                TextView content = textView();
+                textViews.add(content);
+                if (i == 0) {
+                    line.addView(content);
+                    line.addView(vDivider());
+                    line.addView(scrollView);
+                } else if (i == size - 1) {
+                    innerLine.addView(content);
+                } else {
+                    innerLine.addView(content);
+                    innerLine.addView(vDivider());
+                }
             } else {
-                innerLine.addView(content);
-                innerLine.addView(vDivider());
+                if (i == 0) {
+                    for (int j = 0; j < ds.size(); j++) {
+                        TextView content = textView();
+                        textViews.add(content);
+                        if (j == ds.size() - 1) {
+                            line.addView(content);
+                            line.addView(vDivider());
+                            line.addView(scrollView);
+                        } else {
+                            line.addView(content);
+                            line.addView(vDivider());
+                        }
+                    }
+                } else if (i == size - 1) {
+                    for (int j = 0; j < ds.size(); j++) {
+                        TextView content = textView();
+                        textViews.add(content);
+                        if (j == ds.size() - 1) {
+                            innerLine.addView(content);
+                        } else {
+                            innerLine.addView(content);
+                            innerLine.addView(vDivider());
+                        }
+                    }
+                } else {
+                    for (int j = 0; j < ds.size(); j++) {
+                        TextView content = textView();
+                        textViews.add(content);
+                        innerLine.addView(content);
+                        innerLine.addView(vDivider());
+                    }
+                }
             }
         }
         return line;
@@ -321,6 +459,11 @@ public class ExcelView<T> extends BasicView {
         private final int contentAlign;
         private final Comparator<T> sort;
         private final Consumer<T> click;
+        private final List<D<T>> ds;
+
+        public D(String title, int titleAlign, List<D<T>> ds) {
+            this(title, null, titleAlign, 0, null, null, ds);
+        }
 
         public D(String title, Function<T, String> content) {
             this(title, content, 0);
@@ -344,12 +487,18 @@ public class ExcelView<T> extends BasicView {
 
         public D(String title, Function<T, String> content, int titleAlign, int contentAlign, Comparator<T> sort
                 , Consumer<T> click) {
+            this(title, content, titleAlign, contentAlign, sort, click, null);
+        }
+
+        public D(String title, Function<T, String> content, int titleAlign, int contentAlign, Comparator<T> sort
+                , Consumer<T> click, List<D<T>> ds) {
             this.title = title;
             this.content = content;
             this.titleAlign = titleAlign;
             this.contentAlign = contentAlign;
             this.sort = sort;
             this.click = click;
+            this.ds = ds;
         }
     }
 
@@ -373,20 +522,33 @@ public class ExcelView<T> extends BasicView {
         @SuppressWarnings("unchecked")
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = itemView();
+                convertView = contentView();
             }
             List<TextView> textViews = (List<TextView>) convertView.getTag();
             T item = getItem(position);
-            for (int i = 0; i < textViews.size(); i++) {
-                TextView textView = textViews.get(i);
-                D<T> d = ds.get(i);
-                textView.setText(d.content.apply(item));
-                textView.setGravity(textAlign(d.contentAlign));
-                if (d.click != null) {
-                    textView.setOnClickListener(v -> d.click.accept(item));
+            int num = 0;
+            for (D<T> d : ds) {
+                List<D<T>> ds = d.ds;
+                if (ds == null || ds.isEmpty()) {
+                    this.addAction(textViews, item, num, d);
+                    num++;
+                } else {
+                    for (D<T> di : ds) {
+                        this.addAction(textViews, item, num, di);
+                        num++;
+                    }
                 }
             }
             return convertView;
+        }
+
+        private void addAction(List<TextView> textViews, T item, int num, D<T> d) {
+            TextView textView = textViews.get(num);
+            textView.setText(d.content.apply(item));
+            textView.setGravity(textAlign(d.contentAlign));
+            if (d.click != null) {
+                textView.setOnClickListener(v -> d.click.accept(item));
+            }
         }
     }
 
