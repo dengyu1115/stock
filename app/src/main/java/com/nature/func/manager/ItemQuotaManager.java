@@ -1,7 +1,7 @@
 package com.nature.func.manager;
 
 import com.nature.common.calculator.RateCalculator;
-import com.nature.common.calculator.RateResult;
+import com.nature.common.model.RateResult;
 import com.nature.common.enums.ItemType;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.func.model.ItemQuota;

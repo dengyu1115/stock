@@ -90,7 +90,7 @@ public class NetMapper {
         if (StringUtils.isNotBlank(end)) {
             param.append("and date <= ?", end);
         }
-        param.append("order by date desc");
+        param.append("order by date");
         return db.list(param, mapper);
     }
 

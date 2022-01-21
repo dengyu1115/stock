@@ -127,9 +127,7 @@ public class RateDefListPage extends ListPage<RateDef> {
         Integer days = null;
         if (RateDefType.STATIC.getCode().equals(type)) {
             dateStart = this.dateStart.getText().toString();
-            if (StringUtils.isBlank(dateStart)) {
-                throw new RuntimeException("请填写开始日期");
-            } else {
+            if (StringUtils.isNotBlank(dateStart)) {
                 try {
                     new SimpleDateFormat("yyyy-MM-dd").parse(dateStart);
                 } catch (ParseException e) {

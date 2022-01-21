@@ -6,7 +6,7 @@ import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.ioc.annotation.TaskMethod;
 import com.nature.func.mapper.PriceNetMapper;
 import com.nature.func.model.PriceNet;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.common.util.Sorter;
 import com.nature.item.http.NetHttp;
 import com.nature.item.http.PriceHttp;
@@ -149,11 +149,11 @@ public class PriceNetManager {
      */
     @TaskMethod(value = "004", name = "计算价格净值")
     public int calculate() {
-        return ExeUtil.exec(itemManager::list, this::calculate);
+        return LocalExeUtil.exec(itemManager::list, this::calculate);
     }
 
     public int recalculate() {
-        return ExeUtil.exec(priceNetMapper::delete, itemManager::list, this::calculate);
+        return LocalExeUtil.exec(priceNetMapper::delete, itemManager::list, this::calculate);
     }
 
     /**

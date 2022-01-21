@@ -2,19 +2,19 @@ package com.nature.common.page;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.nature.common.util.PopUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.SearchBar;
 import com.nature.common.view.ViewTemplate;
 
 import java.util.List;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public abstract class ListPage<T> extends Page {
 
@@ -92,8 +92,16 @@ public abstract class ListPage<T> extends Page {
 
     protected void refreshData() {
         new Thread(() -> {
-            this.excel.data(this.listData());
-            this.refreshTotal();
+            try {
+                button.setClickable(false);
+                this.excel.data(this.listData());
+                this.refreshTotal();
+            } catch (Exception e) {
+                Looper.prepare();
+                PopUtil.alert(context, e.getMessage());
+            } finally {
+                button.setClickable(true);
+            }
         }).start();
     }
 

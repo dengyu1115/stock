@@ -5,7 +5,7 @@ import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.ioc.annotation.TaskMethod;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.common.util.CommonUtil;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.item.http.NetHttp;
 import com.nature.item.mapper.NetMapper;
 import com.nature.item.model.Item;
@@ -42,12 +42,12 @@ public class NetManager {
     private Map<String, Net> map;
 
     public int reloadAll() {
-        return ExeUtil.exec(netMapper::delete, itemGroupManager::listAllFunds, this::reload);
+        return LocalExeUtil.exec(netMapper::delete, itemGroupManager::listAllFunds, this::reload);
     }
 
     @TaskMethod(value = "003", name = "加载最新净值")
     public int loadLatest() {
-        return ExeUtil.exec(() -> map = netMapper.listLast().stream().collect(Collectors.toMap(Net::getCode, i -> i)),
+        return LocalExeUtil.exec(() -> map = netMapper.listLast().stream().collect(Collectors.toMap(Net::getCode, i -> i)),
                 itemGroupManager::listAllFunds, this::doLoad,
                 () -> map = null);
     }

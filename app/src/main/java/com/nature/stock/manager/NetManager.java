@@ -4,7 +4,7 @@ import com.nature.common.calculator.AvgCalculator;
 import com.nature.common.constant.Constant;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.util.CommonUtil;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.stock.http.NetKlineHttp;
 import com.nature.stock.mapper.NetMapper;
@@ -13,6 +13,7 @@ import com.nature.stock.model.Net;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,21 +29,27 @@ public class NetManager {
     private WorkdayManager workdayManager;
 
     public int reload() {
-        return ExeUtil.exec(netMapper::delete, itemManager::list, this::reload);
+        return LocalExeUtil.exec(netMapper::delete, itemManager::list, this::reload);
     }
 
     public int load() {
         return workdayManager.doInTradeTimeOrNot(date -> {
             throw new RuntimeException("交易时间不可同步数据");
-        }, date -> ExeUtil.exec(itemManager::list, this::load));
+        }, date -> LocalExeUtil.exec(itemManager::list, this::load));
     }
 
     public List<Net> list(String code, String market) {
         return netMapper.list(code, market);
     }
 
-    public List<Net> list(String code, String market, String start, String end) {
+    public List<Net> listAsc(String code, String market, String start, String end) {
         return netMapper.list(code, market, start, end);
+    }
+
+    public List<Net> list(String code, String market, String start, String end) {
+        List<Net> list = netMapper.list(code, market, start, end);
+        list.sort(Comparator.comparing(Net::getDate));
+        return list;
     }
 
     public List<Net> listByDate(String date, String keyWord) {

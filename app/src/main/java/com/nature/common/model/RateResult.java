@@ -1,4 +1,4 @@
-package com.nature.common.calculator;
+package com.nature.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

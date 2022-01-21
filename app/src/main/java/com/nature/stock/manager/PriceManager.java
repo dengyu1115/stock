@@ -3,7 +3,7 @@ package com.nature.stock.manager;
 import com.nature.common.constant.Constant;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.util.CommonUtil;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.stock.http.PriceKlineHttp;
 import com.nature.stock.mapper.PriceMapper;
@@ -26,13 +26,13 @@ public class PriceManager {
     private WorkdayManager workdayManager;
 
     public int reload() {
-        return ExeUtil.exec(priceMapper::delete, itemManager::list, this::reload);
+        return LocalExeUtil.exec(priceMapper::delete, itemManager::list, this::reload);
     }
 
     public int load() {
         return workdayManager.doInTradeTimeOrNot(date -> {
             throw new RuntimeException("交易时间不可同步数据");
-        }, date -> ExeUtil.exec(itemManager::list, this::load));
+        }, date -> LocalExeUtil.exec(itemManager::list, this::load));
     }
 
     public List<Price> list(String code, String market) {

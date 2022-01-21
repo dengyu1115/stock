@@ -1,5 +1,7 @@
 package com.nature.common.calculator;
 
+import com.nature.common.model.RateResult;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -80,11 +82,11 @@ public class RateCalculator {
                     rateMin = 0, markMin = pre, markMax = pre;
             for (int i = 2; i < list.size(); i++) {
                 double next = func.apply(list.get(i));
-                double rateTemp = (curr - markMin) / markMin;
                 if (pre >= curr && next > curr) {
                     if (markMin > curr) {
                         markMin = curr;
                     }
+                    double rateTemp = (curr - markMax) / markMax;
                     if (rateTemp < rateMin) {
                         rateMin = rateTemp;
                     }
@@ -92,6 +94,7 @@ public class RateCalculator {
                     if (markMax < curr) {
                         markMax = curr;
                     }
+                    double rateTemp = (curr - markMin) / markMin;
                     if (rateTemp > rateMax) {
                         rateMax = rateTemp;
                     }

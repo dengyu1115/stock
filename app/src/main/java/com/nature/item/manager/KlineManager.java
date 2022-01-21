@@ -6,7 +6,7 @@ import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.ioc.annotation.TaskMethod;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.common.util.CommonUtil;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.common.util.MaUtil;
 import com.nature.func.manager.ItemQuotaManager;
 import com.nature.item.http.KlineHttp;
@@ -54,7 +54,7 @@ public class KlineManager {
      * @return int
      */
     public int reloadAll() {
-        return ExeUtil.exec(klineMapper::delete, itemManager::list, this::reload);
+        return LocalExeUtil.exec(klineMapper::delete, itemManager::list, this::reload);
     }
 
     /**
@@ -65,7 +65,7 @@ public class KlineManager {
     public int loadLatest() {
         return workdayManager.doInTradeTimeOrNot(date -> {
             throw new RuntimeException("交易时间不可同步数据");
-        }, date -> ExeUtil.exec(
+        }, date -> LocalExeUtil.exec(
                 () -> map = klineMapper.listLast().stream().collect(Collectors.toMap(Kline::getCode, i -> i)),
                 itemManager::list, this::doLoad, () -> map = null));
     }
@@ -76,7 +76,7 @@ public class KlineManager {
      */
     @TaskMethod(value = "002", name = "K线均值计算")
     public int averageAll() {
-        return ExeUtil.exec(this::listItems, this::average);
+        return LocalExeUtil.exec(this::listItems, this::average);
     }
 
     /**

@@ -14,14 +14,12 @@ public class RateTypeMapper {
             "CREATE TABLE IF NOT EXISTS rate_type ( " +
             " code TEXT NOT NULL, " +
             " title TEXT NOT NULL, " +
-            " json TEXT, " +
             " PRIMARY KEY (code))";
-    private static final String COLUMN = "code, title, json";
+    private static final String COLUMN = "code, title";
     private static final Function<Cursor, RateType> mapper = c -> {
         RateType i = new RateType();
         i.setCode(BaseDB.getString(c, "code"));
         i.setTitle(BaseDB.getString(c, "title"));
-        i.setJson(BaseDB.getString(c, "json"));
         return i;
     };
     private final BaseDB baseDB = BaseDB.create();
@@ -33,7 +31,7 @@ public class RateTypeMapper {
 
     public int merge(RateType d) {
         SqlBuilder param = SqlBuilder.build().append("REPLACE INTO rate_type(" + COLUMN + ") VALUES ")
-                .append("(?, ?, ?)", d.getCode(), d.getTitle(), d.getJson());
+                .append("(?, ?)", d.getCode(), d.getTitle());
         return baseDB.executeUpdate(param);
     }
 

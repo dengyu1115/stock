@@ -2,7 +2,7 @@ package com.nature.item.manager;
 
 import com.nature.common.db.BaseDB;
 import com.nature.common.ioc.annotation.Injection;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.item.http.ScaleHttp;
 import com.nature.item.mapper.ScaleMapper;
 import com.nature.item.model.Item;
@@ -26,7 +26,7 @@ public class ScaleManager {
     private ItemGroupManager itemGroupManager;
 
     public int reloadAll() {
-        return ExeUtil.exec(itemGroupManager::listAllFunds, this::reload);
+        return LocalExeUtil.exec(itemGroupManager::listAllFunds, this::reload);
     }
 
     private int reload(Item item) {

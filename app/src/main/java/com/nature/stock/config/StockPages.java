@@ -18,6 +18,7 @@ public interface StockPages {
                     put("K线-不复权", PriceListPage.class);
                     put("K线-复权", NetListPage.class);
                     put("K线-整合", KlineListPage.class);
+                    put("项目-涨幅", ItemQuotaPage.class);
                 }
             };
             Map<String, Class<? extends Page>> mapCent = new LinkedHashMap<String, Class<? extends Page>>() {

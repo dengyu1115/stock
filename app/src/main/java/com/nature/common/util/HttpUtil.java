@@ -24,7 +24,7 @@ public class HttpUtil {
 
     private static final Map<String, String> HEADER = null;
 
-    private static final int POOL_SIZE_CORE = 16, POOL_SIZE_MAX = 64, ALIVE_TIME = 1;
+    private static final int POOL_SIZE_CORE = 32, POOL_SIZE_MAX = 64, ALIVE_TIME = 1;
 
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(POOL_SIZE_CORE, POOL_SIZE_MAX, ALIVE_TIME,
             TimeUnit.SECONDS, new LinkedBlockingDeque<>());

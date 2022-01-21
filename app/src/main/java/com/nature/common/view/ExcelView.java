@@ -93,7 +93,6 @@ public class ExcelView<T> extends BasicView {
         this.colWidth = context.getResources().getDisplayMetrics().widthPixels * widthRate / DENSITY / columns + 0.5f; //  - 2
     }
 
-    @SuppressWarnings("unchecked")
     private LinearLayout titleView() {
         LinearLayout line = this.line();
         HorizontalScrollView scrollView = this.horizontalScrollView();

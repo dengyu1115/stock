@@ -6,7 +6,7 @@ import com.nature.common.enums.QuotaField;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.ioc.annotation.TaskMethod;
 import com.nature.func.manager.WorkdayManager;
-import com.nature.common.util.ExeUtil;
+import com.nature.common.util.LocalExeUtil;
 import com.nature.func.manager.ItemQuotaManager;
 import com.nature.func.model.ItemQuota;
 import com.nature.item.http.QuotaHttp;
@@ -41,12 +41,12 @@ public class QuotaManager {
     private ItemQuotaManager itemQuotaManager;
 
     public int reloadAll() {
-        return ExeUtil.exec(quotaMapper::delete, DefaultQuota::codes, this::load);
+        return LocalExeUtil.exec(quotaMapper::delete, DefaultQuota::codes, this::load);
     }
 
     @TaskMethod(value = "005", name = "加载最新指标")
     public int loadLatest() {
-        return ExeUtil.exec(DefaultQuota::codes, this::load);
+        return LocalExeUtil.exec(DefaultQuota::codes, this::load);
     }
 
     private int load(String code) {

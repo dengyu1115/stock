@@ -4,13 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * 执行工具
- * @author nature
- * @version 1.0.0
- * @since 2020/9/26 17:20
- */
-public class ExeUtil {
+public class LocalExeUtil {
 
     public static final int INT = 0;
 

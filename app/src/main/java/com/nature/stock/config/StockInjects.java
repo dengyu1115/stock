@@ -12,6 +12,7 @@ public interface StockInjects {
             GroupManager.class,
             ItemGroupManager.class,
             RateTypeManager.class,
-            RateDefManager.class
+            RateDefManager.class,
+            ItemQuotaManager.class
     };
 }
