@@ -177,7 +177,7 @@ public class ItemQuotaPage extends Page {
         if (excel != null) {
             body.removeView(excel);
         }
-        excel = new ExcelView<>(context, 9);
+        excel = new ExcelView<>(context, 10);
         excel.define(this.getDs(ruleSel.getValue()));
         body.addView(excel);
         this.refreshData();
