@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.widget.Button;
 import com.nature.common.constant.Constant;
 import com.nature.common.enums.DateType;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.ioc.holder.InstanceHolder;
 import com.nature.common.page.ListPage;
 import com.nature.common.util.ClickUtil;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@PageView(name = "工作日", group = "基础", col = 1, row = 1)
 @SuppressLint("DefaultLocale")
 public class WorkdayPage extends ListPage<Month> {
 

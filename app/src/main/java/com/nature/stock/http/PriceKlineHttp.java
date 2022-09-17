@@ -1,8 +1,10 @@
 package com.nature.stock.http;
 
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.util.TextUtil;
 import com.nature.stock.model.Price;
 
+@Component
 public class PriceKlineHttp extends BaseKlineHttp<Price> {
 
     @Override

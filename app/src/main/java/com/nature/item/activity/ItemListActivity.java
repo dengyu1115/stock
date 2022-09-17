@@ -4,7 +4,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.nature.common.activity.BaseListActivity;
 import com.nature.common.enums.ItemType;
-import com.nature.common.enums.Market;
+import com.nature.stock.enums.Market;
 import com.nature.common.ioc.holder.InstanceHolder;
 import com.nature.common.util.*;
 import com.nature.common.view.ExcelView;

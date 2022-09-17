@@ -1,15 +1,13 @@
 package com.nature.stock.manager;
 
 import com.nature.common.calculator.QuotaCalculator;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.model.Quota;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.RemoteExeUtil;
 import com.nature.stock.enums.RateDefType;
-import com.nature.stock.model.Item;
-import com.nature.stock.model.ItemQuota;
-import com.nature.stock.model.Net;
-import com.nature.stock.model.RateDef;
+import com.nature.stock.model.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,12 +15,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class ItemQuotaManager {
 
     @Injection
     private RateDefManager rateDefManager;
     @Injection
-    private ItemManager itemManager;
+    private StockManager stockManager;
     @Injection
     private NetManager netManager;
 
@@ -34,7 +33,7 @@ public class ItemQuotaManager {
             throw new RuntimeException("group is blank");
         }
         List<RateDef> list = this.listRateDef(rateType, date);
-        List<Item> items = this.listItem(group, keyword);
+        List<Stock> items = this.listItem(group, keyword);
         return RemoteExeUtil.exec(() -> items, i -> itemHandle(list, i));
     }
 
@@ -52,10 +51,10 @@ public class ItemQuotaManager {
         return iq;
     }
 
-    private List<Item> listItem(String group, String keyword) {
-        List<Item> items = itemManager.list(group, keyword);
+    private List<Stock> listItem(String group, String keyword) {
+        List<Stock> items = stockManager.list(group, keyword);
         if (CollectionUtils.isEmpty(items)) {
-            throw new RuntimeException("items is empty");
+            throw new RuntimeException("stocks is empty");
         }
         return items;
     }

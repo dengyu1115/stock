@@ -10,7 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.model.Quota;
 import com.nature.common.page.Page;
 import com.nature.common.util.PopUtil;
@@ -36,15 +37,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+@PageView(name = "涨幅查看", group = "股票", col = 1, row = 6)
 public class ItemQuotaPage extends Page {
 
     public static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
     private static final int C = 0, S = 1, E = 2;
-    private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
-    private final GroupManager groupManager = InstanceHolder.get(GroupManager.class);
-    private final RateTypeManager rateTypeManager = InstanceHolder.get(RateTypeManager.class);
-    private final RateDefManager rateDefManager = InstanceHolder.get(RateDefManager.class);
-    private final ItemQuotaManager itemQuotaManager = InstanceHolder.get(ItemQuotaManager.class);
+    @Injection
+    private WorkdayManager workDayManager;
+    @Injection
+    private GroupManager groupManager;
+    @Injection
+    private RateTypeManager rateTypeManager;
+    @Injection
+    private RateDefManager rateDefManager;
+    @Injection
+    private ItemQuotaManager itemQuotaManager;
     private Context context;
     private final List<ExcelView.D<ItemQuota>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, Sorter.nullsLast(ItemQuota::getName)),

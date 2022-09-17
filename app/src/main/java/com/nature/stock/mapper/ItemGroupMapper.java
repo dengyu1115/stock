@@ -2,8 +2,10 @@ package com.nature.stock.mapper;
 
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.stock.model.ItemGroup;
 
+@Component
 public class ItemGroupMapper {
 
     private static final String TABLE = "" +

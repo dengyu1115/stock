@@ -4,6 +4,7 @@ import android.database.Cursor;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.stock.model.Price;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.function.Function;
 
-
+@Component
 public class PriceMapper {
 
     private static final int BATCH_SIZE = 100;

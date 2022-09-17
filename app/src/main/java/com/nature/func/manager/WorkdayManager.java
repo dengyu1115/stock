@@ -3,6 +3,7 @@ package com.nature.func.manager;
 import android.annotation.SuppressLint;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.common.util.HttpUtil;
 import com.nature.func.mapper.WorkdayMapper;
@@ -18,6 +19,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressLint("DefaultLocale")
+@Component
 public class WorkdayManager {
 
     private static final String FORMAT_DATE = "yyyy-MM-dd";

@@ -4,13 +4,14 @@ import android.database.Cursor;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.stock.model.Kline;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
 
-
+@Component
 public class KlineMapper {
 
     private static final Function<Cursor, Kline> mapper = c -> {

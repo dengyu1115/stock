@@ -18,18 +18,18 @@ public class InstanceHolder {
 
     /**
      * 获取实例
-     * @param tClass 实例class
-     * @param <T>    类型
+     * @param cls 实例class
+     * @param <T> 类型
      * @return 实例
      */
     @SuppressWarnings("all")
-    public static <T> T get(Class<T> tClass) {
-        Object o = map.get(tClass);
-        if (o == null) synchronized (tClass) { // 单例存放
-            if ((o = map.get(tClass)) == null) {
+    public static <T> T get(Class<T> cls) {
+        Object o = map.get(cls);
+        if (o == null) synchronized (cls) { // 单例存放
+            if ((o = map.get(cls)) == null) {
                 try {
-                    map.put(tClass, o = tClass.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
+                    map.put(cls, o = cls.newInstance());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

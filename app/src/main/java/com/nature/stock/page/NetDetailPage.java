@@ -1,6 +1,7 @@
 package com.nature.stock.page;
 
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.ListPage;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.TextUtil;
@@ -15,10 +16,13 @@ import com.nature.stock.model.Net;
 import java.util.Arrays;
 import java.util.List;
 
+@PageView(name = "K线-复权明细", group = "股票", col = 0, row = 0)
 public class NetDetailPage extends ListPage<Net> {
 
-    private final NetManager netManager = InstanceHolder.get(NetManager.class);
-    private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
+    @Injection
+    private NetManager netManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Net>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(this.getName()), C, S, CommonUtil.nullsLast(Net::getName)),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Net::getCode)),

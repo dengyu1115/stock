@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import com.nature.common.ioc.holder.InstanceHolder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class BasicPage extends LinearLayout {
             this.show(page);
         } else {
             try {
-                page = clz.newInstance();
+                page = InstanceHolder.get(clz);
                 page.doCreate(this);
                 page.setParam(param);
                 if (!page.isProtocol()) {

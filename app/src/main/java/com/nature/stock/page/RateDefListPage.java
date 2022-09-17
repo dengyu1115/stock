@@ -8,7 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import com.nature.common.enums.ItemType;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.ListPage;
 import com.nature.common.util.PopUtil;
 import com.nature.common.util.TextUtil;
@@ -30,9 +31,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@PageView(name = "涨幅定义配置", group = "股票", col = 0, row = 0)
 public class RateDefListPage extends ListPage<RateDef> {
 
-    private final RateDefManager rateDefManager = InstanceHolder.get(RateDefManager.class);
+    @Injection
+    private RateDefManager rateDefManager;
     private LinearLayout prop;
     private EditText code, title, days, dateStart, dateEnd;
     private Selector<RateDefType> type;

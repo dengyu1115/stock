@@ -4,14 +4,11 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import com.nature.common.ioc.holder.PageHolder;
+import com.nature.common.model.PageInfo;
 import com.nature.common.view.ViewTemplate;
-import com.nature.func.config.FuncPages;
-import com.nature.stock.config.StockPages;
 
 import java.util.List;
-import java.util.Map;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class MainPage extends Page {
 
@@ -30,7 +27,7 @@ public class MainPage extends Page {
 
     @Override
     protected void onShow() {
-        this.showMain(FuncPages.MENU);
+        this.showMain(PageHolder.get("基础"));
     }
 
     private void makeStructure() {
@@ -47,10 +44,10 @@ public class MainPage extends Page {
         LinearLayout header = new LinearLayout(context);
         page.addView(header);
         header.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, (int) (40 * density)));
-        header.addView(this.tabBtn("配置", FuncPages.MENU));
-        header.addView(this.tabBtn("股票", StockPages.MENU));
-        header.addView(this.tabBtn("指数", null));
-        header.addView(this.tabBtn("基金", null));
+        header.addView(this.tabBtn("基础"));
+        header.addView(this.tabBtn("股票"));
+        header.addView(this.tabBtn("指数"));
+        header.addView(this.tabBtn("基金"));
     }
 
     private void body() {
@@ -59,29 +56,29 @@ public class MainPage extends Page {
         body.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, height - (int) (40 * density)));
     }
 
-    private void showMain(List<Map<String, Class<? extends Page>>> tag) {
+    private void showMain(List<List<PageInfo>> tag) {
         this.body.removeAllViews();
         if (tag == null) {
             return;
         }
-        for (Map<String, Class<? extends Page>> map : tag) {
-            this.listMenu(map);
+        for (List<PageInfo> list : tag) {
+            this.listMenu(list);
         }
     }
 
-    private void listMenu(Map<String, Class<? extends Page>> map) {
+    private void listMenu(List<PageInfo> pages) {
         LinearLayout line = template.line(200, MATCH_PARENT);
         line.setOrientation(LinearLayout.VERTICAL);
         this.body.addView(line);
-        for (Map.Entry<String, Class<? extends Page>> entry : map.entrySet()) {
-            line.addView(this.menuBtn(entry.getKey(), entry.getValue()));
+        for (PageInfo page : pages) {
+            line.addView(this.menuBtn(page.getName(), page.getCls()));
             line.addView(template.textView("", 200, 5));
         }
     }
 
-    private Button tabBtn(String name, List<Map<String, Class<? extends Page>>> tag) {
+    private Button tabBtn(String name) {
         Button btn = template.button(name, 80, 30);
-        btn.setOnClickListener(v -> this.showMain(tag));
+        btn.setOnClickListener(v -> this.showMain(PageHolder.get(name)));
         return btn;
     }
 

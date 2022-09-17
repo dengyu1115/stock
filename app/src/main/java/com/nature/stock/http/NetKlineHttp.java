@@ -1,8 +1,10 @@
 package com.nature.stock.http;
 
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.util.TextUtil;
 import com.nature.stock.model.Net;
 
+@Component
 public class NetKlineHttp extends BaseKlineHttp<Net> {
 
     @Override

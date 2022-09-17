@@ -90,7 +90,8 @@ public class ExcelView<T> extends BasicView {
     }
 
     private void calculateColumnWidth() {
-        this.colWidth = context.getResources().getDisplayMetrics().widthPixels * widthRate / DENSITY / columns + 0.5f; //  - 2
+//        context.getResources().getDisplayMetrics().widthPixels;
+        this.colWidth = 2140 * widthRate / DENSITY / columns + 0.5f; //  - 2
     }
 
     private LinearLayout titleView() {

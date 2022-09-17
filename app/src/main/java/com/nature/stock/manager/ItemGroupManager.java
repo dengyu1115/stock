@@ -1,9 +1,11 @@
 package com.nature.stock.manager;
 
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.stock.mapper.ItemGroupMapper;
 import com.nature.stock.model.ItemGroup;
 
+@Component
 public class ItemGroupManager {
 
     @Injection

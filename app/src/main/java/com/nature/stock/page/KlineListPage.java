@@ -1,7 +1,8 @@
 package com.nature.stock.page;
 
 import android.widget.EditText;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.ListPage;
 import com.nature.common.page.Page;
 import com.nature.common.util.CommonUtil;
@@ -17,10 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+@PageView(name = "K线-整合", group = "股票", col = 1, row = 5)
 public class KlineListPage extends ListPage<Kline> {
-
-    private final KlineManager klineManager = InstanceHolder.get(KlineManager.class);
-    private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
+    @Injection
+    private KlineManager klineManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Kline>> ds = Arrays.asList(
             new ExcelView.D<>("", C, Arrays.asList(
                     new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, CommonUtil.nullsLast(Kline::getName), this.detail()),

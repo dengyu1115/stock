@@ -9,46 +9,64 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.Page;
 import com.nature.common.util.CommonUtil;
+import com.nature.common.util.Sorter;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
+import com.nature.common.view.Selector;
 import com.nature.common.view.ViewTemplate;
+import com.nature.stock.enums.Market;
+import com.nature.stock.manager.IndustryManager;
 import com.nature.stock.manager.ItemGroupManager;
-import com.nature.stock.manager.ItemManager;
+import com.nature.stock.manager.StockManager;
+import com.nature.stock.model.Industry;
 import com.nature.stock.model.Item;
 import com.nature.stock.model.ItemGroup;
+import com.nature.stock.model.Stock;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@PageView(name = "项目分组", group = "股票", col = 0, row = 0)
 public class ItemGroupPage extends Page {
 
     private static final int CENTER = 0, START = 1;
-    private final ItemManager itemManager = InstanceHolder.get(ItemManager.class);
-    private final ItemGroupManager itemGroupManager = InstanceHolder.get(ItemGroupManager.class);
+    @Injection
+    private IndustryManager industryManager;
+    @Injection
+    private StockManager stockManager;
+    @Injection
+    private ItemGroupManager itemGroupManager;
     private Context context;
     private LinearLayout page;
     private float uw, uh;
     private EditText tText, aText;
     private Button tQuery, aQuery;
-    private ExcelView<Item> toAdd, added;
+    private ExcelView<Stock> toAdd, added;
+    private Selector<String> exchange, industry;
     private ViewTemplate template;
     private String lkw;
     private String group;
-    private List<Item> toAddList, addedList;
-    private final List<ExcelView.D<Item>> lds = Arrays.asList(
-            new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), CENTER, START, CommonUtil.nullsLast(Item::getName), toKlineView()),
-            new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), CENTER, START, CommonUtil.nullsLast(Item::getCode), toKlineView()),
+    private Map<String, String> map;
+    private List<Stock> toAddList, addedList;
+    private final List<ExcelView.D<Stock>> lds = Arrays.asList(
+            new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), CENTER, START, CommonUtil.nullsLast(Stock::getName), toKlineView()),
+            new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), CENTER, START, CommonUtil.nullsLast(Stock::getCode), toKlineView()),
+            new ExcelView.D<>("交易所", d -> TextUtil.text(Market.codeToName(d.getExchange())), C, E, Sorter.nullsLast(Stock::getExchange)),
+            new ExcelView.D<>("行业", d -> TextUtil.text(this.map.get(d.getIndustry())), C, E, Sorter.nullsLast(Stock::getIndustry)),
             new ExcelView.D<>("操作", d -> "+", CENTER, CENTER, this.leftClick())
     );
 
-    private final List<ExcelView.D<Item>> rds = Arrays.asList(
-            new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), CENTER, START, CommonUtil.nullsLast(Item::getName), toKlineView()),
-            new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), CENTER, START, CommonUtil.nullsLast(Item::getCode)),
+    private final List<ExcelView.D<Stock>> rds = Arrays.asList(
+            new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), CENTER, START, CommonUtil.nullsLast(Stock::getName), toKlineView()),
+            new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), CENTER, START, CommonUtil.nullsLast(Stock::getCode)),
+            new ExcelView.D<>("交易所", d -> TextUtil.text(Market.codeToName(d.getExchange())), C, E, Sorter.nullsLast(Stock::getExchange)),
+            new ExcelView.D<>("行业", d -> TextUtil.text(this.map.get(d.getIndustry())), C, E, Sorter.nullsLast(Stock::getIndustry)),
             new ExcelView.D<>("操作", d -> "—", CENTER, CENTER, this.rightClick())
     );
 
@@ -79,11 +97,19 @@ public class ItemGroupPage extends Page {
     private void initBehaviours() {
         this.tText.setText("");
         this.aText.setText("");
-        this.toAddList = itemManager.list();
+        List<String> exchanges = Arrays.stream(Market.values()).map(Market::getCode).collect(Collectors.toList());
+        exchanges.add(0, null);
+        exchange.mapper(this::getExchangeName).init().refreshData(exchanges);
+        List<Industry> list = industryManager.list();
+        this.map = list.stream().collect(Collectors.toMap(Industry::getCode, Industry::getName, (o, n) -> n));
+        List<String> industries = list.stream().map(Industry::getCode).collect(Collectors.toList());
+        industries.add(0, null);
+        industry.mapper(this::getIndustryName).init().refreshData(industries);
+        this.toAddList = stockManager.list();
         if (StringUtils.isBlank(this.group = this.getParam())) {
             this.addedList = new ArrayList<>();
         } else {
-            this.addedList = itemManager.list(this.group, null);
+            this.addedList = stockManager.list(this.group, null);
         }
         if (!this.addedList.isEmpty()) {
             this.toAddList.removeAll(new HashSet<>(this.addedList));
@@ -100,10 +126,12 @@ public class ItemGroupPage extends Page {
         LinearLayout layout = this.block(100, 10);
         page.addView(layout);
         LinearLayout left = this.block(50, 10);
-        left.addView(tText = template.editText(120, 30));
+        left.addView(tText = template.editText(100, 30));
+        left.addView(exchange = template.selector(100, 30));
+        left.addView(industry = template.selector(100, 30));
         left.addView(tQuery = template.button("查询", 60, 30));
         LinearLayout right = this.block(50, 10);
-        right.addView(aText = template.editText(120, 30));
+        right.addView(aText = template.editText(100, 30));
         right.addView(aQuery = template.button("查询", 60, 30));
         layout.addView(left);
         layout.addView(right);
@@ -119,8 +147,8 @@ public class ItemGroupPage extends Page {
         left.setLayoutParams(p);
         LinearLayout right = this.block(50, 90);
         right.setLayoutParams(p);
-        left.addView(toAdd = new ExcelView<>(context, 3, 0.49f));
-        right.addView(added = new ExcelView<>(context, 3, 0.49f));
+        left.addView(toAdd = new ExcelView<>(context, 5, 0.49f));
+        right.addView(added = new ExcelView<>(context, 5, 0.49f));
         layout.addView(left);
         layout.addView(divider());
         layout.addView(right);
@@ -150,7 +178,7 @@ public class ItemGroupPage extends Page {
         return (int) (uh * percent + 0.5f);
     }
 
-    private Consumer<Item> leftClick() {
+    private Consumer<Stock> leftClick() {
         return i -> {
             ItemGroup ig = new ItemGroup();
             ig.setGroup(this.group);
@@ -164,7 +192,7 @@ public class ItemGroupPage extends Page {
         };
     }
 
-    private Consumer<Item> rightClick() {
+    private Consumer<Stock> rightClick() {
         return i -> {
             itemGroupManager.delete(this.group, i.getCode(), i.getMarket());
             addedList.remove(i);
@@ -174,19 +202,27 @@ public class ItemGroupPage extends Page {
         };
     }
 
-    private Consumer<Item> toKlineView() {
+    private Consumer<Stock> toKlineView() {
         return d -> this.show(KlineViewPage.class, d);
     }
 
     private void refreshLeftExcel() {
         lkw = this.tText.getText().toString();
         toAddList.sort(Comparator.comparing(Item::getCode));
-        if (StringUtils.isNotBlank(lkw)) {
-            this.toAdd.data(toAddList.stream().filter(i -> i.getCode().contains(lkw) || i.getName().contains(lkw))
-                    .collect(Collectors.toList()));
-        } else {
-            this.toAdd.data(toAddList);
+        this.toAdd.data(toAddList.stream().filter(this::letFilter).collect(Collectors.toList()));
+    }
+
+    private boolean letFilter(Stock i) {
+        String exchange = this.exchange.getValue();
+        String industry = this.industry.getValue();
+        boolean match = true;
+        if (StringUtils.isNotBlank(exchange)) {
+            match = exchange.equals(i.getExchange());
         }
+        if (StringUtils.isNotBlank(industry)) {
+            match = match && industry.equals(i.getIndustry());
+        }
+        return match && (i.getCode().contains(lkw) || i.getName().contains(lkw));
     }
 
     private void refreshRightExcel() {
@@ -198,6 +234,20 @@ public class ItemGroupPage extends Page {
         } else {
             this.added.data(addedList);
         }
+    }
+
+    private String getExchangeName(String code) {
+        if (code == null) {
+            return "--请选择--";
+        }
+        return Market.codeToName(code);
+    }
+
+    private String getIndustryName(String code) {
+        if (code == null) {
+            return "--请选择--";
+        }
+        return this.map.get(code);
     }
 
 }

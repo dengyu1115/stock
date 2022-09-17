@@ -45,6 +45,12 @@ public class CommonUtil {
         return DateFormatUtils.format(resultDate, Constant.FORMAT_DATE);
     }
 
+    public static int monthBefore(String date) {
+        Date from = parseDate(date, Constant.FORMAT_DATE);
+        long diff = System.currentTimeMillis() - from.getTime();
+        return (int) (diff / 30 / 24 / 60 / 60 / 1000);
+    }
+
     public static String formatDate(String date) {
         return String.format("%s-%s-%s", date.substring(0, 4), date.substring(4, 6), date.substring(6, 8));
     }

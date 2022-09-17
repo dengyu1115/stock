@@ -5,7 +5,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import com.nature.common.enums.ItemType;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.ListPage;
 import com.nature.common.util.CommonUtil;
 import com.nature.common.util.PopUtil;
@@ -23,9 +24,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@PageView(name = "分组", group = "股票", col = 2, row = 1)
 public class GroupListPage extends ListPage<Group> {
-
-    private final GroupManager groupManager = InstanceHolder.get(GroupManager.class);
+    @Injection
+    private GroupManager groupManager;
     private EditText keyword;
     private LinearLayout page;
     private EditText code, name;

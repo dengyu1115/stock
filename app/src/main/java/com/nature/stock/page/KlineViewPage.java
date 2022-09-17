@@ -3,7 +3,8 @@ package com.nature.stock.page;
 import android.content.Context;
 import android.graphics.Color;
 import android.widget.LinearLayout;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.Page;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.LView;
@@ -19,6 +20,7 @@ import java.util.function.Function;
 import static com.nature.common.view.LView.C;
 import static com.nature.common.view.LView.Q;
 
+@PageView(name = "K线图", group = "股票", col = 0, row = 0)
 public class KlineViewPage extends Page {
 
     private static final int[] COLORS = new int[]{0xFFFF0000, 0xFF1E90FF, 0xFF32CD32, 0xFFEEEE00, 0xFF8E388E};
@@ -64,7 +66,8 @@ public class KlineViewPage extends Page {
             new C<>(1000, 1, FUNC_AMOUNT, TextUtil::amount)
     );
 
-    private final KlineManager klineManager = InstanceHolder.get(KlineManager.class);
+    @Injection
+    private KlineManager klineManager;
 
     private LView<Kline> view;
 

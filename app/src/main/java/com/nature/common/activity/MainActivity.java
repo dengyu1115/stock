@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.nature.common.ioc.starter.ComponentStarter;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BasicPage view;
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         this.setContentView(view);
         view.show(MainPage.class);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
-            ComponentStarter.getInstance().start();
+            ComponentStarter.getInstance().start(this);
             NotifyUtil.context = MainActivity.this;
         }
     }
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void verifyStoragePermissions(Activity activity) {
         // 检测是否有写的权限
         int permission = ActivityCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);

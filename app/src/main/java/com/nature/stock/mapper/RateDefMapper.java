@@ -3,11 +3,13 @@ package com.nature.stock.mapper;
 import android.database.Cursor;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.SqlBuilder;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.stock.model.RateDef;
 
 import java.util.List;
 import java.util.function.Function;
 
+@Component
 public class RateDefMapper {
 
     private static final String TABLE = "" +

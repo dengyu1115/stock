@@ -1,7 +1,7 @@
 package com.nature.item.http;
 
 import com.nature.common.enums.ItemType;
-import com.nature.common.enums.Market;
+import com.nature.stock.enums.Market;
 
 public class SzStockHttp extends BaseStockHttp {
 

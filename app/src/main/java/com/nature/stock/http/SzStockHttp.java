@@ -1,16 +1,18 @@
 package com.nature.stock.http;
 
-import com.nature.common.enums.Market;
+import com.nature.common.ioc.annotation.Component;
+import com.nature.stock.enums.Market;
 
+@Component
 public class SzStockHttp extends BaseStockHttp {
 
     @Override
     protected String fs() {
-        return "m:0+t:6,m:0+t:80";
+        return Market.SZ.getFs();
     }
 
     @Override
-    protected String market() {
+    protected String exchange() {
         return Market.SZ.getCode();
     }
 

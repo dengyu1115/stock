@@ -1,11 +1,13 @@
 package com.nature.stock.manager;
 
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.stock.mapper.RateDefMapper;
 import com.nature.stock.model.RateDef;
 
 import java.util.List;
 
+@Component
 public class RateDefManager {
 
     @Injection

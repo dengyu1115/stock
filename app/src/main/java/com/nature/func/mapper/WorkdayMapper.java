@@ -5,11 +5,13 @@ import android.database.Cursor;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
+import com.nature.common.ioc.annotation.Component;
 import com.nature.func.model.Workday;
 
 import java.util.List;
 import java.util.function.Function;
 
+@Component
 public class WorkdayMapper {
 
     private static final String DATE = "date";

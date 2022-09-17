@@ -2,7 +2,8 @@ package com.nature.stock.page;
 
 import android.widget.Button;
 import android.widget.EditText;
-import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.ioc.annotation.PageView;
 import com.nature.common.page.ListPage;
 import com.nature.common.util.ClickUtil;
 import com.nature.common.util.CommonUtil;
@@ -19,10 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+@PageView(name = "K线不复权", group = "股票", col = 1, row = 3)
 public class PriceListPage extends ListPage<Price> {
 
-    private final PriceManager priceManager = InstanceHolder.get(PriceManager.class);
-    private final WorkdayManager workDayManager = InstanceHolder.get(WorkdayManager.class);
+    @Injection
+    private PriceManager priceManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Price>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, CommonUtil.nullsLast(Price::getName), this.detail()),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Price::getCode)),

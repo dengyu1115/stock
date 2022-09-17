@@ -1,13 +1,13 @@
 package com.nature.stock.manager;
 
+import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
-import com.nature.func.mapper.DefinitionMapper;
-import com.nature.func.model.Definition;
 import com.nature.stock.mapper.RateTypeMapper;
 import com.nature.stock.model.RateType;
 
 import java.util.List;
 
+@Component
 public class RateTypeManager {
 
     @Injection
