@@ -20,14 +20,12 @@ public enum QuotaField {
     GB("06", "股本"),
     GB_LT("07", "流通股本");
 
-    private final String code;
-    private final String name;
-
     private static final List<String> CODES = Arrays.stream(values())
             .map(QuotaField::getCode).collect(Collectors.toList());
-
     private static final Map<String, String> CODE_NAME = Arrays.stream(values())
             .collect(Collectors.toMap(QuotaField::getCode, QuotaField::getName));
+    private final String code;
+    private final String name;
 
     public static String codeToName(String code) {
         return CODE_NAME.get(code);

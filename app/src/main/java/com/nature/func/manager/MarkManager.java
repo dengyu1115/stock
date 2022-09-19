@@ -1,9 +1,9 @@
 package com.nature.func.manager;
 
 import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.util.CommonUtil;
 import com.nature.func.mapper.MarkMapper;
 import com.nature.func.model.Mark;
-import com.nature.common.util.CommonUtil;
 import com.nature.item.manager.KlineManager;
 import com.nature.item.model.Item;
 import com.nature.item.model.Kline;

@@ -1,5 +1,7 @@
 package com.nature.stock.manager;
 
+import com.nature.base.manager.BaseItemManager;
+import com.nature.base.mapper.BaseItemMapper;
 import com.nature.common.exception.Warn;
 import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
@@ -17,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class StockManager {
+public class StockManager extends BaseItemManager<Stock> {
 
     @Injection
     private StockMapper stockMapper;
@@ -32,7 +34,13 @@ public class StockManager {
     @Injection
     private IndustryStockHttp industryStockHttp;
 
-    public int reload() {
+    @Override
+    protected BaseItemMapper<Stock> mapper() {
+        return this.stockMapper;
+    }
+
+    @Override
+    protected List<Stock> listFromHttp() {
         List<Stock> list = Arrays.asList(szStockHttp, shStockHttp, bjStockHttp)
                 .parallelStream().map(BaseStockHttp::list).flatMap(List::stream).collect(Collectors.toList());
         List<Industry> industries = industryManager.list();
@@ -49,12 +57,7 @@ public class StockManager {
             }
             i.setIndustry(stock.getIndustry());
         }
-        stockMapper.delete();
-        return stockMapper.batchMerge(list);
-    }
-
-    public List<Stock> list() {
-        return stockMapper.list(null, null, null);
+        return list;
     }
 
     public List<Stock> list(String exchange, String industry, String keyWord) {

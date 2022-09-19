@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 
 public class ClickUtil {
 
+    private static final Map<View, Long> VIEW_TIME = new ConcurrentHashMap<>();
     private static long millis;
 
     public static void doClick(View view, Runnable runnable) {
@@ -31,8 +32,6 @@ public class ClickUtil {
             millis = System.currentTimeMillis();
         }
     }
-
-    private static final Map<View, Long> VIEW_TIME = new ConcurrentHashMap<>();
 
     public static void asyncClick(View view, Supplier<String> supplier) {
         Handler handler = new Handler(msg -> {

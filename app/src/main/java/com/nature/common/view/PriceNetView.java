@@ -5,8 +5,8 @@ import android.content.Context;
 import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.View;
-import com.nature.func.model.PriceNet;
 import com.nature.common.util.TextUtil;
+import com.nature.func.model.PriceNet;
 
 import java.util.*;
 import java.util.function.Function;
@@ -354,7 +354,7 @@ public class PriceNetView extends View {
      */
     private void fixPrice() {
         price.sx = (int) (all.sx / 20f * 17f + all.ex / 20f * 3f + 0.5f);
-        price.ex = (int) (all.sx / 20f * 1f + all.ex / 20f * 19f + 0.5f);
+        price.ex = (int) (all.sx / 20f + all.ex / 20f * 19f + 0.5f);
         price.sy = (int) (all.sy / 20f * 18f + all.ey / 20f * 2f + 0.5f);
         price.ey = (int) (all.sy / 20f * 7f + all.ey / 20f * 13f + 0.5f);
     }
@@ -364,7 +364,7 @@ public class PriceNetView extends View {
      */
     private void fixRate() {
         rate.sx = (int) (all.sx / 20f * 17f + all.ex / 20f * 3f + 0.5f);
-        rate.ex = (int) (all.sx / 20f * 1f + all.ex / 20f * 19f + 0.5f);
+        rate.ex = (int) (all.sx / 20f + all.ex / 20f * 19f + 0.5f);
         rate.sy = (int) (all.sy / 20f * 7f + all.ey / 20f * 13f + 0.5f);
         rate.ey = (int) (all.sy / 20f * 4f + all.ey / 20f * 16f + 0.5f);
     }
@@ -374,9 +374,9 @@ public class PriceNetView extends View {
      */
     private void fixAmount() {
         amount.sx = (int) (all.sx / 20f * 17f + all.ex / 20f * 3f + 0.5f);
-        amount.ex = (int) (all.sx / 20f * 1f + all.ex / 20f * 19f + 0.5f);
+        amount.ex = (int) (all.sx / 20f + all.ex / 20f * 19f + 0.5f);
         amount.sy = (int) (all.sy / 20f * 4f + all.ey / 20f * 16f + 0.5f);
-        amount.ey = (int) (all.sy / 20f * 1f + all.ey / 20f * 19f + 0.5f);
+        amount.ey = (int) (all.sy / 20f + all.ey / 20f * 19f + 0.5f);
     }
 
     private void fixTexts() {

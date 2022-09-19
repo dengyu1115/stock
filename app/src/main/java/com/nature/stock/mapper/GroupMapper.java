@@ -1,17 +1,18 @@
 package com.nature.stock.mapper;
 
 import android.database.Cursor;
+import com.nature.base.mapper.BaseGroupMapper;
+import com.nature.base.model.Group;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.common.ioc.annotation.Component;
-import com.nature.stock.model.Group;
 
 import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class GroupMapper {
+public class GroupMapper implements BaseGroupMapper {
 
     private static final String TABLE = "" +
             "CREATE TABLE IF NOT EXISTS `group` ( " +

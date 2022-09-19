@@ -12,16 +12,14 @@ import java.util.stream.Collectors;
 
 public class LView<T> extends View {
 
+    private final XY all = new XY(), rect = new XY();
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int sizeDefault = 90, sizeMin = 30, sizeMax = 1800;
     private int[] colors;
     private List<List<Q<T>>> qs;
     private List<C<T>> rs;
     private Function<T, String> xText;
     private T empty;
-
-    private final XY all = new XY(), rect = new XY();
-
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private List<T> data, list;
     private T curr;
     private List<String> dateTexts;

@@ -1,5 +1,6 @@
 package com.nature.stock.model;
 
+import com.nature.base.model.Item;
 import com.nature.common.model.Quota;
 import lombok.Getter;
 import lombok.Setter;

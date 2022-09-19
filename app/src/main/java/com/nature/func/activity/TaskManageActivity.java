@@ -8,15 +8,15 @@ import android.widget.LinearLayout;
 import com.nature.common.activity.BaseListActivity;
 import com.nature.common.enums.TaskStatus;
 import com.nature.common.enums.TaskType;
-import com.nature.func.manager.TaskInfoManager;
-import com.nature.func.model.TaskInfo;
-import com.nature.common.util.CommonUtil;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.util.CommonUtil;
 import com.nature.common.util.PopUtil;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.SearchBar;
 import com.nature.common.view.Selector;
+import com.nature.func.manager.TaskInfoManager;
+import com.nature.func.model.TaskInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;

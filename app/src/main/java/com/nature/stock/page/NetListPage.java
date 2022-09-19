@@ -23,10 +23,6 @@ import java.util.function.Consumer;
 @PageView(name = "K线-复权", group = "股票", col = 1, row = 4)
 public class NetListPage extends ListPage<Net> {
 
-    @Injection
-    private NetManager netManager;
-    @Injection
-    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Net>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, CommonUtil.nullsLast(Net::getName), this.detail()),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Net::getCode)),
@@ -40,6 +36,10 @@ public class NetListPage extends ListPage<Net> {
             new ExcelView.D<>("平均-季", d -> TextUtil.price(d.getAvgSeason()), C, E, CommonUtil.nullsLast(Net::getAvgSeason)),
             new ExcelView.D<>("平均-年", d -> TextUtil.price(d.getAvgYear()), C, E, CommonUtil.nullsLast(Net::getAvgYear))
     );
+    @Injection
+    private NetManager netManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private Selector<String> date;
     private EditText keyword;
     private Button reload, load;

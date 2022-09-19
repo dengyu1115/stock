@@ -4,7 +4,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.nature.common.activity.BaseListActivity;
 import com.nature.common.ioc.holder.InstanceHolder;
-import com.nature.common.util.*;
+import com.nature.common.util.ClickUtil;
+import com.nature.common.util.CommonUtil;
+import com.nature.common.util.PopUtil;
+import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.SearchBar;
 import com.nature.item.manager.ScaleManager;
@@ -24,9 +27,6 @@ public class ScaleListActivity extends BaseListActivity<Scale> {
     private final ScaleManager scaleManager = InstanceHolder.get(ScaleManager.class);
 
     private String name;
-
-    private EditText keyword;
-
     private final List<ExcelView.D<Scale>> ds = Arrays.asList(
             new ExcelView.D<>("name", d -> TextUtil.text(name == null ? d.getName() : name), C, S),
             new ExcelView.D<>("code", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Scale::getCode)),
@@ -34,7 +34,7 @@ public class ScaleListActivity extends BaseListActivity<Scale> {
             new ExcelView.D<>("金额", d -> TextUtil.amount(d.getAmount()), C, E, CommonUtil.nullsLast(Scale::getAmount)),
             new ExcelView.D<>("变动", d -> TextUtil.percent(d.getChange()), C, E, CommonUtil.nullsLast(Scale::getChange))
     );
-
+    private EditText keyword;
     private Button reload;
 
     @Override

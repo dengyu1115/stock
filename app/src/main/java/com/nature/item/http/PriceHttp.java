@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nature.common.constant.Constant;
-import com.nature.func.model.PriceNet;
 import com.nature.common.util.HttpUtil;
 import com.nature.common.util.TextUtil;
+import com.nature.func.model.PriceNet;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.ArrayList;

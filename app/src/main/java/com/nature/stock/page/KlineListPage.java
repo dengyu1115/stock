@@ -20,10 +20,6 @@ import java.util.function.Consumer;
 
 @PageView(name = "K线-整合", group = "股票", col = 1, row = 5)
 public class KlineListPage extends ListPage<Kline> {
-    @Injection
-    private KlineManager klineManager;
-    @Injection
-    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Kline>> ds = Arrays.asList(
             new ExcelView.D<>("", C, Arrays.asList(
                     new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, CommonUtil.nullsLast(Kline::getName), this.detail()),
@@ -51,6 +47,10 @@ public class KlineListPage extends ListPage<Kline> {
                     new ExcelView.D<>("年", d -> TextUtil.price(d.getAvgYear()), C, E, CommonUtil.nullsLast(Kline::getAvgYear))
             ))
     );
+    @Injection
+    private KlineManager klineManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private Selector<String> date;
     private EditText keyword;
 

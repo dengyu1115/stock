@@ -7,6 +7,9 @@ import java.util.function.Function;
 
 public class RateCalculator {
 
+    private static final DoCompare GATHER = (a, b) -> a > b;
+    private static final DoCompare LESS = (a, b) -> a < b;
+
     public static <T> RateResult cal(List<T> list, Function<T, Double> func) {
         return new Duplicate<T>(list, func).cal();
     }
@@ -15,9 +18,13 @@ public class RateCalculator {
         return new Single<T>(list, func, GATHER).cal();
     }
 
-
     public static <T> double min(List<T> list, Function<T, Double> func) {
         return new Single<T>(list, func, LESS).cal();
+    }
+
+    @FunctionalInterface
+    private interface DoCompare {
+        boolean apply(double a, double b);
     }
 
     private static class Single<T> {
@@ -115,14 +122,5 @@ public class RateCalculator {
             }
             return new RateResult(rateMax, rateMin);
         }
-    }
-
-    private static final DoCompare GATHER = (a, b) -> a > b;
-
-    private static final DoCompare LESS = (a, b) -> a < b;
-
-    @FunctionalInterface
-    private interface DoCompare {
-        boolean apply(double a, double b);
     }
 }

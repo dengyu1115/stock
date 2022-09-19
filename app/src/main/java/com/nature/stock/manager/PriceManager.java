@@ -8,7 +8,7 @@ import com.nature.common.util.RemoteExeUtil;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.stock.http.PriceKlineHttp;
 import com.nature.stock.mapper.PriceMapper;
-import com.nature.stock.model.Item;
+import com.nature.base.model.Item;
 import com.nature.stock.model.Price;
 import org.apache.commons.lang3.time.DateFormatUtils;
 

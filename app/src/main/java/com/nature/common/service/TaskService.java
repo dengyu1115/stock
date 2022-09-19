@@ -13,8 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import com.nature.R;
 import com.nature.common.constant.Constant;
-import com.nature.func.manager.TaskManager;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.func.manager.TaskManager;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Calendar;

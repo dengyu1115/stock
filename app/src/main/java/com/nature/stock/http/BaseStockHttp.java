@@ -20,10 +20,14 @@ public abstract class BaseStockHttp {
                 lines -> lines.collect(Collectors.toList()).get(0));
         JSONObject jo = JSON.parseObject(response);
         JSONObject data = jo.getJSONObject("data");
-        if (data == null) throw new RuntimeException("no data from http");
+        if (data == null) {
+            throw new RuntimeException("no data from http");
+        }
         JSONArray ks = data.getJSONArray("diff");
         List<Stock> list = new ArrayList<>();
-        for (int i = 0; i < ks.size(); i++) list.add(this.genItem(ks.getJSONObject(i)));
+        for (int i = 0; i < ks.size(); i++) {
+            list.add(this.genItem(ks.getJSONObject(i)));
+        }
         return list;
     }
 

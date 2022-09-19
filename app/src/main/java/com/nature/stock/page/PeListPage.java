@@ -23,16 +23,16 @@ import java.util.function.Consumer;
 @PageView(name = "市盈率", group = "股票", col = 1, row = 7)
 public class PeListPage extends ListPage<Pe> {
 
-    @Injection
-    private PeManager peManager;
-    @Injection
-    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Pe>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, CommonUtil.nullsLast(Pe::getName), this.detail()),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Pe::getCode)),
             new ExcelView.D<>("日期", d -> TextUtil.text(d.getDate()), C, S, CommonUtil.nullsLast(Pe::getDate)),
             new ExcelView.D<>("市盈率", d -> TextUtil.price(d.getPe()), C, E, CommonUtil.nullsLast(Pe::getPe))
     );
+    @Injection
+    private PeManager peManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private Selector<String> date;
     private EditText keyword;
     private Button reload, load;

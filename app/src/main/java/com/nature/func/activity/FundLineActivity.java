@@ -6,11 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.fastjson.JSON;
-import com.nature.func.manager.LineManager;
-import com.nature.func.model.LineDef;
 import com.nature.common.ioc.holder.InstanceHolder;
 import com.nature.common.util.ViewUtil;
 import com.nature.common.view.LineView;
+import com.nature.func.manager.LineManager;
+import com.nature.func.model.LineDef;
 import com.nature.item.model.Item;
 
 import java.util.ArrayList;

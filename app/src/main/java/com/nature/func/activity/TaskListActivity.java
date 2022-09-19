@@ -2,15 +2,15 @@ package com.nature.func.activity;
 
 import android.widget.EditText;
 import com.nature.common.activity.BaseListActivity;
-import com.nature.func.manager.TaskManager;
-import com.nature.func.manager.WorkdayManager;
-import com.nature.func.model.TaskRecord;
-import com.nature.common.util.CommonUtil;
 import com.nature.common.ioc.holder.InstanceHolder;
+import com.nature.common.util.CommonUtil;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.SearchBar;
 import com.nature.common.view.Selector;
+import com.nature.func.manager.TaskManager;
+import com.nature.func.manager.WorkdayManager;
+import com.nature.func.model.TaskRecord;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;

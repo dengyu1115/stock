@@ -2,8 +2,8 @@ package com.nature.func.manager;
 
 import com.alibaba.fastjson.JSON;
 import com.nature.common.ioc.annotation.Injection;
-import com.nature.func.model.Definition;
 import com.nature.func.mapper.FundRateMapper;
+import com.nature.func.model.Definition;
 import com.nature.func.model.FundRate;
 import com.nature.func.model.RateDef;
 import com.nature.item.manager.ItemManager;

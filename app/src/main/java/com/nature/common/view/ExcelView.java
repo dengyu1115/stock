@@ -29,9 +29,6 @@ public class ExcelView<T> extends BasicView {
     public static final int PADDING = 8;
     public static final int SCROLL_BAR_SIZE = 3;
     private final int columns;
-    private List<D<T>> ds;
-    private List<T> list = new ArrayList<>();
-    private float colWidth;
     private final float widthRate;
     private final LayoutParams param = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
     private final List<HorizontalScrollView> horizontalScrollViews = new ArrayList<>();
@@ -43,8 +40,12 @@ public class ExcelView<T> extends BasicView {
         adapter.notifyDataSetChanged();
         return false;
     });
+    private List<D<T>> ds;
+    private List<T> list = new ArrayList<>();
+    private float colWidth;
     private HorizontalScrollView touchView;
     private int scrollX;
+    private final OnScrollChangeListener scrollChangeListener = (v, x, y, ox, oy) -> this.scrollAll(this.scrollX = x);
     private int oldScrollX;
     private int childCount;
     private Comparator<T> comparator;
@@ -52,7 +53,6 @@ public class ExcelView<T> extends BasicView {
     private boolean sortClicked;
     private float clickX, clickY;
     private int titleGroup, titleCol;
-    private final OnScrollChangeListener scrollChangeListener = (v, x, y, ox, oy) -> this.scrollAll(this.scrollX = x);
 
     public ExcelView(Context context) {
         this(context, 3);

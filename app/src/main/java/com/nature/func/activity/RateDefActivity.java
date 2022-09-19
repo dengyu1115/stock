@@ -12,12 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.fastjson.JSON;
 import com.nature.common.constant.DefType;
 import com.nature.common.ioc.holder.InstanceHolder;
-import com.nature.func.manager.DefinitionManager;
-import com.nature.func.model.Definition;
-import com.nature.common.util.*;
+import com.nature.common.util.PopUtil;
+import com.nature.common.util.Sorter;
+import com.nature.common.util.TextUtil;
+import com.nature.common.util.ViewUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.Selector;
+import com.nature.func.manager.DefinitionManager;
 import com.nature.func.manager.FundListDefManager;
+import com.nature.func.model.Definition;
 import com.nature.func.model.RateDef;
 import org.apache.commons.lang3.StringUtils;
 

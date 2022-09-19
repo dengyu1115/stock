@@ -24,13 +24,13 @@ public abstract class Page {
         return this.page;
     }
 
-    public <P> void setParam(P param) {
-        this.param = param;
-    }
-
     @SuppressWarnings("unchecked")
     protected <P> P getParam() {
         return (P) this.param;
+    }
+
+    public <P> void setParam(P param) {
+        this.param = param;
     }
 
     protected void setOrientation(int orientation) {

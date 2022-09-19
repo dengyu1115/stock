@@ -21,6 +21,8 @@ public class ComponentStarter {
 
     private static ComponentStarter instance;
 
+    private boolean ran;
+
     private ComponentStarter() {
     }
 
@@ -35,7 +37,10 @@ public class ComponentStarter {
         return instance;
     }
 
-    public void start(Context ctx) {
+    public synchronized void start(Context ctx) {
+        if (ran) {
+            return;
+        }
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             if (loader == null) {
@@ -63,6 +68,7 @@ public class ComponentStarter {
                     PageHolder.register(cls, pageView);
                 }
             }
+            ran = true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

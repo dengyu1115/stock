@@ -1,16 +1,17 @@
 package com.nature.stock.mapper;
 
 import android.database.Cursor;
+import com.nature.base.mapper.BaseRateDefMapper;
+import com.nature.base.model.RateDef;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.common.ioc.annotation.Component;
-import com.nature.stock.model.RateDef;
 
 import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class RateDefMapper {
+public class RateDefMapper implements BaseRateDefMapper {
 
     private static final String TABLE = "" +
             "CREATE TABLE IF NOT EXISTS rate_def ( " +

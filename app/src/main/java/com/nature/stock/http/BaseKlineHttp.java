@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nature.common.util.HttpUtil;
-import com.nature.stock.model.Item;
+import com.nature.base.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,13 @@ public abstract class BaseKlineHttp<T extends Item> {
         String response = HttpUtil.doGet(uri, lines -> lines.collect(Collectors.toList()).get(0));
         JSONObject jo = JSON.parseObject(response);
         JSONObject data = jo.getJSONObject("data");
-        if (data == null) throw new RuntimeException("data is null：" + code + market);
+        if (data == null) {
+            throw new RuntimeException("data is null：" + code + market);
+        }
         JSONArray ks = data.getJSONArray("klines");
-        if (ks == null) throw new RuntimeException("klines is null：" + code + market);
+        if (ks == null) {
+            throw new RuntimeException("klines is null：" + code + market);
+        }
         List<T> list = new ArrayList<>();
         for (Object datum : ks) list.add(this.genKline(code, market, (String) datum));
         return list;

@@ -15,13 +15,11 @@ public enum TaskStatus {
     VALID("1", "有效"),
     INVALID("0", "无效");
 
-    private String code, name;
-
     private static final List<String> CODES = Arrays.stream(values())
             .map(TaskStatus::getCode).collect(Collectors.toList());
-
-    private static final Map<String,String> CODE_NAME = Arrays.stream(values())
-            .collect(Collectors.toMap(TaskStatus::getCode,TaskStatus::getName));
+    private static final Map<String, String> CODE_NAME = Arrays.stream(values())
+            .collect(Collectors.toMap(TaskStatus::getCode, TaskStatus::getName));
+    private String code, name;
 
     public static List<String> codes() {
         return CODES;

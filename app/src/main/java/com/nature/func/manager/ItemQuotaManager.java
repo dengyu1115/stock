@@ -1,9 +1,9 @@
 package com.nature.func.manager;
 
 import com.nature.common.calculator.RateCalculator;
-import com.nature.common.model.RateResult;
 import com.nature.common.enums.ItemType;
 import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.model.RateResult;
 import com.nature.func.model.ItemQuota;
 import com.nature.item.manager.ItemGroupManager;
 import com.nature.item.manager.KlineManager;

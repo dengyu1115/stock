@@ -1,5 +1,7 @@
 package com.nature.stock.manager;
 
+import com.nature.base.manager.BaseItemLineManager;
+import com.nature.base.model.Item;
 import com.nature.common.calculator.AvgCalculator;
 import com.nature.common.constant.Constant;
 import com.nature.common.ioc.annotation.Component;
@@ -9,7 +11,6 @@ import com.nature.common.util.RemoteExeUtil;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.stock.http.NetKlineHttp;
 import com.nature.stock.mapper.NetMapper;
-import com.nature.stock.model.Item;
 import com.nature.stock.model.Net;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -19,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class NetManager {
+public class NetManager implements BaseItemLineManager<Net> {
 
     @Injection
     private NetKlineHttp netKlineHttp;

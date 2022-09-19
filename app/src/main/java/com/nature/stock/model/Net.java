@@ -1,14 +1,13 @@
 package com.nature.stock.model;
 
+import com.nature.base.model.ItemLine;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Net extends Item {
+public class Net extends ItemLine {
 
-    private String date;
-    private Double latest;
     private Double open;
     private Double high;
     private Double low;

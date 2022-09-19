@@ -1,7 +1,6 @@
 package com.nature.func.model;
 
 import com.nature.common.model.BaseModel;
-import com.nature.func.model.Line;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -5,9 +5,9 @@ import android.content.Context;
 import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.View;
+import com.nature.common.util.TextUtil;
 import com.nature.func.model.Line;
 import com.nature.func.model.LineDef;
-import com.nature.common.util.TextUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,7 +37,7 @@ public class LineView extends View {
     private float unitDate, unitPrice, dx, px, py, lx;
     private boolean longPressed, moving;
     private String dateStart;
-    private List<Q> qs = Arrays.asList(new Q("日期", null, "初始", Color.BLACK));
+    private List<Q> qs = Collections.singletonList(new Q("日期", null, "初始", Color.BLACK));
     private Double minPrice;
 
     public LineView(Context context) {
@@ -352,7 +352,7 @@ public class LineView extends View {
      */
     private void fixPrice() {
         price.sx = (int) (all.sx / 20f * 18.5f + all.ex / 20f * 1.5f + 0.5f);
-        price.ex = (int) (all.sx / 20f * 1f + all.ex / 20f * 19f + 0.5f);
+        price.ex = (int) (all.sx / 20f + all.ex / 20f * 19f + 0.5f);
         price.sy = (int) (all.sy / 20f * 17f + all.ey / 20f * 3f + 0.5f);
         price.ey = (int) (all.sy / 20f * 2f + all.ey / 20f * 18f + 0.5f);
     }

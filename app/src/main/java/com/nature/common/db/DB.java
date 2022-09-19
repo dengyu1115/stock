@@ -24,10 +24,6 @@ public class DB {
     private final List<SQLiteDatabase> readDbs;
     private final SQLiteDatabase writeDb;
 
-    public static DB create(String path) {
-        return DB_MAP.computeIfAbsent(path, DB::new);
-    }
-
     private DB(String path) {
         File file = new File(INTERNAL, path);
         FileUtil.createIfNotExists(file);
@@ -37,6 +33,10 @@ public class DB {
         for (int i = 0; i < processors; i++) {
             readDbs.add(SQLiteDatabase.openOrCreateDatabase(file, null));
         }
+    }
+
+    public static DB create(String path) {
+        return DB_MAP.computeIfAbsent(path, DB::new);
     }
 
     public static Integer getInt(Cursor c, String col) {
@@ -172,7 +172,7 @@ public class DB {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            return gainDb();
+            return this.gainDb();
         } else {
             SQLiteDatabase database = readDbs.get(0);
             readDbs.remove(database);

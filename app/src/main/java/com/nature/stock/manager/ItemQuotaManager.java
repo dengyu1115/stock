@@ -1,22 +1,15 @@
 package com.nature.stock.manager;
 
-import com.nature.common.calculator.QuotaCalculator;
+import com.nature.base.manager.*;
 import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
-import com.nature.common.model.Quota;
-import com.nature.common.util.CommonUtil;
-import com.nature.common.util.RemoteExeUtil;
-import com.nature.stock.enums.RateDefType;
-import com.nature.stock.model.*;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.nature.stock.model.Net;
+import com.nature.stock.model.Stock;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.function.Function;
 
 @Component
-public class ItemQuotaManager {
+public class ItemQuotaManager extends BaseItemQuotaManager<Stock, Net> {
 
     @Injection
     private RateDefManager rateDefManager;
@@ -24,54 +17,37 @@ public class ItemQuotaManager {
     private StockManager stockManager;
     @Injection
     private NetManager netManager;
+    @Injection
+    private ItemGroupManager itemGroupManager;
 
-    public List<ItemQuota> list(String rateType, String group, String date, String keyword) {
-        if (StringUtils.isBlank(rateType)) {
-            throw new RuntimeException("type is blank");
-        }
-        if (StringUtils.isBlank(group)) {
-            throw new RuntimeException("group is blank");
-        }
-        List<RateDef> list = this.listRateDef(rateType, date);
-        List<Stock> items = this.listItem(group, keyword);
-        return RemoteExeUtil.exec(() -> items, i -> itemHandle(list, i));
+    @Override
+    protected BaseRateDefManager rateDefManager() {
+        return this.rateDefManager;
     }
 
-    private ItemQuota itemHandle(List<RateDef> list, Item i) {
-        ItemQuota iq = new ItemQuota();
-        iq.setCode(i.getCode());
-        iq.setMarket(i.getMarket());
-        iq.setName(i.getName());
-        List<Quota> qs = new ArrayList<>();
-        iq.setList(qs);
-        for (RateDef j : list) {
-            List<Net> nets = netManager.listAsc(i.getCode(), i.getMarket(), j.getDateStart(), j.getDateEnd());
-            qs.add(QuotaCalculator.calculate(nets, Net::getDate, Net::getLatest, Net::getLow, Net::getHigh));
-        }
-        return iq;
+    @Override
+    protected BaseItemManager<Stock> itemManager() {
+        return this.stockManager;
     }
 
-    private List<Stock> listItem(String group, String keyword) {
-        List<Stock> items = stockManager.list(group, keyword);
-        if (CollectionUtils.isEmpty(items)) {
-            throw new RuntimeException("stocks is empty");
-        }
-        return items;
+    @Override
+    protected BaseItemGroupManager itemGroupManager() {
+        return this.itemGroupManager;
     }
 
-    private List<RateDef> listRateDef(String rateType, String date) {
-        List<RateDef> list = rateDefManager.list(rateType);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new RuntimeException("rate ref list is empty");
-        }
-        for (RateDef i : list) {
-            if (RateDefType.PERIOD.getCode().equals(i.getType())) {
-                i.setDateStart(CommonUtil.addDays(CommonUtil.formatDate(new Date()), -i.getDays()));
-            } else if (StringUtils.isBlank(i.getDateStart())) {
-                i.setDateStart(date);
-            }
-        }
-        return list;
+    @Override
+    protected BaseItemLineManager<Net> itemLineManager() {
+        return this.netManager;
+    }
+
+    @Override
+    protected Function<Net, Double> highFunc() {
+        return Net::getHigh;
+    }
+
+    @Override
+    protected Function<Net, Double> lowFunc() {
+        return Net::getLow;
     }
 
 }

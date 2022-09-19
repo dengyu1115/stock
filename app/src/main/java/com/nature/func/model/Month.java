@@ -7,9 +7,8 @@ import java.util.Map;
 
 public class Month extends BaseModel {
 
-    private String month;
-
     private final Map<String, String> dates = new HashMap<>();
+    private String month;
 
     public String getMonth() {
         return month;

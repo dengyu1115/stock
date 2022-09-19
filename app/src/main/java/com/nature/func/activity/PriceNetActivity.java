@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import com.nature.func.manager.PriceNetManager;
-import com.nature.func.model.PriceNet;
 import com.nature.common.ioc.holder.InstanceHolder;
 import com.nature.common.util.ViewUtil;
 import com.nature.common.view.PriceNetView;
+import com.nature.func.manager.PriceNetManager;
+import com.nature.func.model.PriceNet;
 
 import java.util.List;
 

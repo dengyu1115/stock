@@ -31,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         ViewUtil.initActivity(this);
         super.onCreate(savedInstanceState);
         this.verifyStoragePermissions(this);
-        view = new BasicPage(this);
-        this.setContentView(view);
-        view.show(MainPage.class);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
             ComponentStarter.getInstance().start(this);
             NotifyUtil.context = MainActivity.this;
         }
+        view = new BasicPage(this);
+        this.setContentView(view);
+        view.show(MainPage.class);
     }
 
 

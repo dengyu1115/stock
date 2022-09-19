@@ -9,7 +9,7 @@ import com.nature.common.page.Page;
 import com.nature.common.util.TextUtil;
 import com.nature.common.view.LView;
 import com.nature.stock.manager.KlineManager;
-import com.nature.stock.model.Item;
+import com.nature.base.model.Item;
 import com.nature.stock.model.Kline;
 
 import java.util.Arrays;
@@ -23,6 +23,18 @@ import static com.nature.common.view.LView.Q;
 @PageView(name = "K线图", group = "股票", col = 0, row = 0)
 public class KlineViewPage extends Page {
 
+    public static final List<Function<Kline, Double>> FUNC_PRICE = Arrays.asList(
+            Kline::getPriceLatest,
+            Kline::getPriceOpen,
+            Kline::getPriceHigh,
+            Kline::getPriceLow);
+    public static final List<Function<Kline, Double>> FUNC_NET = Arrays.asList(
+            Kline::getLatest,
+            Kline::getAvgWeek,
+            Kline::getAvgMonth,
+            Kline::getAvgSeason,
+            Kline::getAvgYear);
+    public static final List<Function<Kline, Double>> FUNC_AMOUNT = Collections.singletonList(Kline::getAmount);
     private static final int[] COLORS = new int[]{0xFFFF0000, 0xFF1E90FF, 0xFF32CD32, 0xFFEEEE00, 0xFF8E388E};
     private static final List<List<Q<Kline>>> QS = Arrays.asList(
             Arrays.asList(
@@ -47,19 +59,6 @@ public class KlineViewPage extends Page {
                     new Q<>("年平均:", d -> TextUtil.price(d.getAvgYear()), COLORS[4])
             )
     );
-
-    public static final List<Function<Kline, Double>> FUNC_PRICE = Arrays.asList(
-            Kline::getPriceLatest,
-            Kline::getPriceOpen,
-            Kline::getPriceHigh,
-            Kline::getPriceLow);
-    public static final List<Function<Kline, Double>> FUNC_NET = Arrays.asList(
-            Kline::getLatest,
-            Kline::getAvgWeek,
-            Kline::getAvgMonth,
-            Kline::getAvgSeason,
-            Kline::getAvgYear);
-    public static final List<Function<Kline, Double>> FUNC_AMOUNT = Collections.singletonList(Kline::getAmount);
     private static final List<C<Kline>> RS = Arrays.asList(
             new C<>(1000, 3, FUNC_PRICE, TextUtil::price),
             new C<>(1000, 3, FUNC_NET, TextUtil::price),

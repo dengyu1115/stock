@@ -1,22 +1,20 @@
 package com.nature.stock.manager;
 
+import com.nature.base.manager.BaseItemGroupManager;
+import com.nature.base.mapper.BaseItemGroupMapper;
 import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
 import com.nature.stock.mapper.ItemGroupMapper;
-import com.nature.stock.model.ItemGroup;
 
 @Component
-public class ItemGroupManager {
+public class ItemGroupManager extends BaseItemGroupManager {
 
     @Injection
     private ItemGroupMapper itemGroupMapper;
 
-    public int merge(ItemGroup i) {
-        return itemGroupMapper.merge(i);
-    }
-
-    public int delete(String group, String code, String market) {
-        return itemGroupMapper.delete(group, code, market);
+    @Override
+    protected BaseItemGroupMapper mapper() {
+        return this.itemGroupMapper;
     }
 
 }

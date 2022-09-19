@@ -20,6 +20,7 @@ public class PageHolder {
         return CTX.get(name);
     }
 
+    @SuppressWarnings("unchecked")
     public static void register(Class<?> cls, PageView pageView) {
         String group = pageView.group();
         String name = pageView.name();

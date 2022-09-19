@@ -10,10 +10,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.nature.common.view.ViewTemplate;
 import com.nature.common.util.ViewUtil;
 import com.nature.common.view.ExcelView;
 import com.nature.common.view.SearchBar;
+import com.nature.common.view.ViewTemplate;
 
 import java.util.List;
 

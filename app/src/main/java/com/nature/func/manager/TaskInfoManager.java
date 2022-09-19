@@ -1,9 +1,9 @@
 package com.nature.func.manager;
 
 import com.nature.common.ioc.annotation.Injection;
+import com.nature.common.util.TaskHolder;
 import com.nature.func.mapper.TaskInfoMapper;
 import com.nature.func.model.TaskInfo;
-import com.nature.common.util.TaskHolder;
 
 import java.util.List;
 

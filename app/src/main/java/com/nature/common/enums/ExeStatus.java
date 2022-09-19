@@ -16,11 +16,11 @@ public enum ExeStatus {
     END("1", "执行结束"),
     EXCEPTION("2", "执行异常");
 
-    private final String code, name;
     private static final List<String> CODES = Arrays.stream(values())
             .map(ExeStatus::getCode).collect(Collectors.toList());
     private static final Map<String, String> CODE_NAME = Arrays.stream(values())
             .collect(Collectors.toMap(ExeStatus::getCode, ExeStatus::getName));
+    private final String code, name;
 
     public static List<String> codes() {
         return CODES;

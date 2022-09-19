@@ -331,7 +331,7 @@ public class QuotaView extends View {
      */
     private void fixPrice() {
         price.sx = (int) (all.sx / 20f * 18f + all.ex / 20f * 2f + 0.5f);
-        price.ex = (int) (all.sx / 20f * 1f + all.ex / 20f * 19f + 0.5f);
+        price.ex = (int) (all.sx / 20f + all.ex / 20f * 19f + 0.5f);
         price.sy = (int) (all.sy / 20f * 16f + all.ey / 20f * 4f + 0.5f);
         price.ey = (int) (all.sy / 20f * 2f + all.ey / 20f * 18f + 0.5f);
     }

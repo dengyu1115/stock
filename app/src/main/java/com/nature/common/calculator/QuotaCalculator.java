@@ -8,7 +8,8 @@ import java.util.function.Function;
 public class QuotaCalculator {
 
 
-    public static <T> Quota calculate(List<T> list, Function<T, String> getDate, Function<T, Double> getPrice, Function<T, Double> getLow, Function<T, Double> getHigh) {
+    public static <T> Quota calculate(List<T> list, Function<T, String> getDate, Function<T, Double> getPrice,
+                                      Function<T, Double> getLow, Function<T, Double> getHigh) {
         Quota quota = new Quota();
         if (list.isEmpty()) {
             return quota;
@@ -16,7 +17,8 @@ public class QuotaCalculator {
         T first = list.get(0);
         T last = list.get(list.size() - 1);
         String dateStart = getDate.apply(first), dateEnd = getDate.apply(last);
-        double open = getPrice.apply(first), low = getLow.apply(first), high = getHigh.apply(first), latest = getPrice.apply(last), size = list.size(), total = latest, rateMax = 0d, rateMin = 0d;
+        double open = getPrice.apply(first), low = getLow.apply(first), high = getHigh.apply(first),
+                latest = getPrice.apply(last), size = list.size(), total = latest, rateMax = 0d, rateMin = 0d;
         if (list.size() == 1) {
             return result(dateStart, dateEnd, open, low, high, latest, size, total, rateMax, rateMin);
         }
@@ -80,7 +82,8 @@ public class QuotaCalculator {
         return result(dateStart, dateEnd, open, low, high, latest, size, total, rateMax, rateMin);
     }
 
-    private static Quota result(String dateStart, String dateEnd, double open, double low, double high, double latest, double size, double total, double rateMax, double rateMin) {
+    private static Quota result(String dateStart, String dateEnd, double open, double low, double high, double latest,
+                                double size, double total, double rateMax, double rateMin) {
         double avg = total / size;
         double rateOpen = (latest - open) / open;
         double rateHigh = (latest - high) / high;

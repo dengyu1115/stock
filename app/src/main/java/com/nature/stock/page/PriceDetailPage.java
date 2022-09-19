@@ -10,7 +10,7 @@ import com.nature.common.view.SearchBar;
 import com.nature.common.view.Selector;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.stock.manager.PriceManager;
-import com.nature.stock.model.Item;
+import com.nature.base.model.Item;
 import com.nature.stock.model.Price;
 
 import java.util.Arrays;
@@ -23,6 +23,8 @@ public class PriceDetailPage extends ListPage<Price> {
     private PriceManager priceManager;
     @Injection
     private WorkdayManager workDayManager;
+    private Selector<String> start, end;
+    private Item item;
     private final List<ExcelView.D<Price>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(this.getName()), C, S, CommonUtil.nullsLast(Price::getName)),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Price::getCode)),
@@ -34,8 +36,6 @@ public class PriceDetailPage extends ListPage<Price> {
             new ExcelView.D<>("交易量", d -> TextUtil.amount(d.getShare()), C, E, CommonUtil.nullsLast(Price::getShare)),
             new ExcelView.D<>("交易额", d -> TextUtil.amount(d.getAmount()), C, E, CommonUtil.nullsLast(Price::getAmount))
     );
-    private Selector<String> start, end;
-    private Item item;
 
     @Override
     protected List<ExcelView.D<Price>> define() {

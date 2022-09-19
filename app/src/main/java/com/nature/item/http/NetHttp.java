@@ -3,9 +3,9 @@ package com.nature.item.http;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.nature.func.model.PriceNet;
 import com.nature.common.util.HttpUtil;
 import com.nature.common.util.TextUtil;
+import com.nature.func.model.PriceNet;
 import com.nature.item.model.Net;
 
 import java.util.*;

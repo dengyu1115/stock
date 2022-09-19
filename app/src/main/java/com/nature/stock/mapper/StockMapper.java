@@ -1,6 +1,7 @@
 package com.nature.stock.mapper;
 
 import android.database.Cursor;
+import com.nature.base.mapper.BaseItemMapper;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.common.ioc.annotation.Component;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class StockMapper {
+public class StockMapper implements BaseItemMapper<Stock> {
 
     private static final int BATCH_SIZE = 190;
     private static final String TABLE = "" +
@@ -55,6 +56,12 @@ public class StockMapper {
 
     public int delete() {
         return db.executeUpdate(SqlBuilder.build().append("delete from stock"));
+    }
+
+    @Override
+    public List<Stock> list() {
+        SqlBuilder param = SqlBuilder.build().append("select code, name, market, exchange, industry from stock");
+        return db.list(param, mapper);
     }
 
     public List<Stock> list(String exchange, String industry, String keyWord) {

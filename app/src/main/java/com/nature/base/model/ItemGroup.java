@@ -1,4 +1,4 @@
-package com.nature.stock.model;
+package com.nature.base.model;
 
 import lombok.Getter;
 import lombok.Setter;

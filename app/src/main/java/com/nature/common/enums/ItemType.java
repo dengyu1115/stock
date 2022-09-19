@@ -16,12 +16,10 @@ public enum ItemType {
     INDEX("INDEX", "指数"),
     FUND("FUND", "基金");
 
-    private String code;
-
-    private String name;
-
     private static final Map<String, String> CODE_NAME = Arrays.stream(values())
             .collect(Collectors.toMap(ItemType::getCode, ItemType::getName));
+    private String code;
+    private String name;
 
     public static String codeToName(String code) {
         return CODE_NAME.get(code);

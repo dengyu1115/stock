@@ -23,10 +23,6 @@ import java.util.function.Consumer;
 @PageView(name = "K线不复权", group = "股票", col = 1, row = 3)
 public class PriceListPage extends ListPage<Price> {
 
-    @Injection
-    private PriceManager priceManager;
-    @Injection
-    private WorkdayManager workDayManager;
     private final List<ExcelView.D<Price>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, CommonUtil.nullsLast(Price::getName), this.detail()),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Price::getCode)),
@@ -38,7 +34,10 @@ public class PriceListPage extends ListPage<Price> {
             new ExcelView.D<>("交易量", d -> TextUtil.amount(d.getShare()), C, E, CommonUtil.nullsLast(Price::getShare)),
             new ExcelView.D<>("交易额", d -> TextUtil.amount(d.getAmount()), C, E, CommonUtil.nullsLast(Price::getAmount))
     );
-
+    @Injection
+    private PriceManager priceManager;
+    @Injection
+    private WorkdayManager workDayManager;
     private Selector<String> date;
     private EditText keyword;
     private Button reload, load;

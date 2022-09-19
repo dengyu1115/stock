@@ -22,14 +22,14 @@ public class PeDetailPage extends ListPage<Pe> {
     private PeManager peManager;
     @Injection
     private WorkdayManager workDayManager;
+    private Selector<String> start, end;
+    private Pe pe;
     private final List<ExcelView.D<Pe>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(this.getName()), C, S, CommonUtil.nullsLast(Pe::getName)),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Pe::getCode)),
             new ExcelView.D<>("日期", d -> TextUtil.text(d.getDate()), C, S, CommonUtil.nullsLast(Pe::getDate)),
             new ExcelView.D<>("市盈率", d -> TextUtil.price(d.getPe()), C, E, CommonUtil.nullsLast(Pe::getPe))
     );
-    private Selector<String> start, end;
-    private Pe pe;
 
     @Override
     protected List<ExcelView.D<Pe>> define() {

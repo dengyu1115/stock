@@ -10,7 +10,7 @@ import com.nature.common.view.SearchBar;
 import com.nature.common.view.Selector;
 import com.nature.func.manager.WorkdayManager;
 import com.nature.stock.manager.NetManager;
-import com.nature.stock.model.Item;
+import com.nature.base.model.Item;
 import com.nature.stock.model.Net;
 
 import java.util.Arrays;
@@ -23,6 +23,8 @@ public class NetDetailPage extends ListPage<Net> {
     private NetManager netManager;
     @Injection
     private WorkdayManager workDayManager;
+    private Selector<String> start, end;
+    private Item item;
     private final List<ExcelView.D<Net>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(this.getName()), C, S, CommonUtil.nullsLast(Net::getName)),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, S, CommonUtil.nullsLast(Net::getCode)),
@@ -36,8 +38,6 @@ public class NetDetailPage extends ListPage<Net> {
             new ExcelView.D<>("平均-季", d -> TextUtil.price(d.getAvgSeason()), C, E, CommonUtil.nullsLast(Net::getAvgSeason)),
             new ExcelView.D<>("平均-年", d -> TextUtil.price(d.getAvgYear()), C, E, CommonUtil.nullsLast(Net::getAvgYear))
     );
-    private Selector<String> start, end;
-    private Item item;
 
     @Override
     protected List<ExcelView.D<Net>> define() {

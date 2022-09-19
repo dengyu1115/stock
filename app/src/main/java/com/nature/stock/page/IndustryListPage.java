@@ -18,12 +18,12 @@ import java.util.List;
 
 @PageView(name = "行业", group = "股票", col = 1, row = 1)
 public class IndustryListPage extends ListPage<Industry> {
-    @Injection
-    private IndustryManager industryManager;
     private final List<ExcelView.D<Industry>> ds = Arrays.asList(
             new ExcelView.D<>("名称", d -> TextUtil.text(d.getName()), C, S, Sorter.nullsLast(Industry::getName)),
             new ExcelView.D<>("CODE", d -> TextUtil.text(d.getCode()), C, C, Sorter.nullsLast(Industry::getCode))
     );
+    @Injection
+    private IndustryManager industryManager;
     private Button reload;
 
     protected List<Industry> listData() {
