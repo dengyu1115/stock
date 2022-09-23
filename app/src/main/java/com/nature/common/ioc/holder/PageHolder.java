@@ -21,7 +21,7 @@ public class PageHolder {
     }
 
     @SuppressWarnings("unchecked")
-    public static void register(Class<?> cls, PageView pageView) {
+    public synchronized static void register(Class<?> cls, PageView pageView) {
         String group = pageView.group();
         String name = pageView.name();
         int col = pageView.col();
