@@ -42,6 +42,7 @@ public class RemoteExeUtil {
         try {
             return run.apply(i);
         } catch (Exception e) {    // ignore
+            e.printStackTrace();
             return doExec(run, i, counted);
         }
     }

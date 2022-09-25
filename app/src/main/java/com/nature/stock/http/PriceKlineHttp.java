@@ -1,8 +1,9 @@
 package com.nature.stock.http;
 
+import com.nature.base.model.Price;
+import com.nature.base.model.Val;
 import com.nature.common.ioc.annotation.Component;
 import com.nature.common.util.TextUtil;
-import com.nature.stock.model.Price;
 
 @Component
 public class PriceKlineHttp extends BaseKlineHttp<Price> {
@@ -19,10 +20,12 @@ public class PriceKlineHttp extends BaseKlineHttp<Price> {
         i.setMarket(market);
         String[] s = line.split(",");
         i.setDate(s[0]);
-        i.setOpen(TextUtil.getDouble(s[1]));
-        i.setLatest(TextUtil.getDouble(s[2]));
-        i.setHigh(TextUtil.getDouble(s[3]));
-        i.setLow(TextUtil.getDouble(s[4]));
+        Val val = new Val();
+        i.setVal(val);
+        val.setOpen(TextUtil.getDouble(s[1]));
+        val.setLatest(TextUtil.getDouble(s[2]));
+        val.setHigh(TextUtil.getDouble(s[3]));
+        val.setLow(TextUtil.getDouble(s[4]));
         i.setShare(TextUtil.getDouble(s[5]));
         i.setAmount(TextUtil.getDouble(s[6]));
         return i;

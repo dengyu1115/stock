@@ -1,9 +1,9 @@
 package com.nature.stock.manager;
 
 import com.nature.base.manager.*;
+import com.nature.base.model.Net;
 import com.nature.common.ioc.annotation.Component;
 import com.nature.common.ioc.annotation.Injection;
-import com.nature.stock.model.Net;
 import com.nature.stock.model.Stock;
 
 import java.util.function.Function;
@@ -41,13 +41,18 @@ public class ItemQuotaManager extends BaseItemQuotaManager<Stock, Net> {
     }
 
     @Override
+    protected Function<Net, Double> latestFunc() {
+        return i -> i.getNet().getLatest();
+    }
+
+    @Override
     protected Function<Net, Double> highFunc() {
-        return Net::getHigh;
+        return i -> i.getNet().getHigh();
     }
 
     @Override
     protected Function<Net, Double> lowFunc() {
-        return Net::getLow;
+        return i -> i.getNet().getLow();
     }
 
 }

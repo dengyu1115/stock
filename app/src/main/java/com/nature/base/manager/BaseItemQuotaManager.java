@@ -43,7 +43,7 @@ public abstract class BaseItemQuotaManager<T extends Item, I extends ItemLine> {
         iq.setList(qs);
         for (RateDef j : list) {
             List<I> nets = this.itemLineManager().listAsc(i.getCode(), i.getMarket(), j.getDateStart(), j.getDateEnd());
-            qs.add(QuotaCalculator.calculate(nets, I::getDate, I::getLatest, this.lowFunc(), this.highFunc()));
+            qs.add(QuotaCalculator.calculate(nets, I::getDate, this.latestFunc(), this.lowFunc(), this.highFunc()));
         }
         return iq;
     }
@@ -86,6 +86,8 @@ public abstract class BaseItemQuotaManager<T extends Item, I extends ItemLine> {
     protected abstract BaseItemGroupManager itemGroupManager();
 
     protected abstract BaseItemLineManager<I> itemLineManager();
+
+    protected abstract Function<I, Double> latestFunc();
 
     protected abstract Function<I, Double> highFunc();
 

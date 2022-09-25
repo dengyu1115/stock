@@ -1,11 +1,13 @@
 package com.nature.stock.mapper;
 
 import android.database.Cursor;
+import com.nature.base.mapper.BasePriceMapper;
+import com.nature.base.model.Price;
+import com.nature.base.model.Val;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.common.ioc.annotation.Component;
-import com.nature.stock.model.Price;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class PriceMapper {
+public class PriceMapper implements BasePriceMapper {
 
     private static final int BATCH_SIZE = 100;
     private static final String TABLE = "" +
@@ -35,10 +37,12 @@ public class PriceMapper {
         i.setName(BaseDB.getString(c, "name"));
         i.setDate(BaseDB.getString(c, "date"));
         i.setMarket(BaseDB.getString(c, "market"));
-        i.setOpen(BaseDB.getDouble(c, "open"));
-        i.setLatest(BaseDB.getDouble(c, "latest"));
-        i.setHigh(BaseDB.getDouble(c, "high"));
-        i.setLow(BaseDB.getDouble(c, "low"));
+        Val val = new Val();
+        i.setVal(val);
+        val.setOpen(BaseDB.getDouble(c, "open"));
+        val.setLatest(BaseDB.getDouble(c, "latest"));
+        val.setHigh(BaseDB.getDouble(c, "high"));
+        val.setLow(BaseDB.getDouble(c, "low"));
         i.setShare(BaseDB.getDouble(c, "share"));
         i.setAmount(BaseDB.getDouble(c, "amount"));
         return i;
@@ -59,8 +63,9 @@ public class PriceMapper {
     private int doBatchMerge(List<Price> list) {
         SqlBuilder param = SqlBuilder.build().append("REPLACE INTO price(").append(COLUMNS).append(")VALUES ")
                 .foreach(list, null, null, ",", (d, sqlParam) -> {
+                    Val val = d.getVal();
                     sqlParam.append("(?, ?, ?, ?, ?, ?, ?, ?, ?)", d.getCode(), d.getMarket(), d.getDate(),
-                            d.getOpen(), d.getLatest(), d.getHigh(), d.getLow(), d.getShare(), d.getAmount());
+                            val.getOpen(), val.getLatest(), val.getHigh(), val.getLow(), d.getShare(), d.getAmount());
                 });
         return db.executeUpdate(param);
     }

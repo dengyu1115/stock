@@ -1,11 +1,14 @@
 package com.nature.stock.mapper;
 
 import android.database.Cursor;
+import com.nature.base.mapper.BaseNetMapper;
+import com.nature.base.model.Avg;
+import com.nature.base.model.Net;
+import com.nature.base.model.Val;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.common.ioc.annotation.Component;
-import com.nature.stock.model.Net;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class NetMapper {
+public class NetMapper implements BaseNetMapper {
 
     private static final int BATCH_SIZE = 70;
     private static final String TABLE = "" +
@@ -38,14 +41,18 @@ public class NetMapper {
         i.setName(BaseDB.getString(c, "name"));
         i.setDate(BaseDB.getString(c, "date"));
         i.setMarket(BaseDB.getString(c, "market"));
-        i.setOpen(BaseDB.getDouble(c, "open"));
-        i.setLatest(BaseDB.getDouble(c, "latest"));
-        i.setHigh(BaseDB.getDouble(c, "high"));
-        i.setLow(BaseDB.getDouble(c, "low"));
-        i.setAvgWeek(BaseDB.getDouble(c, "avg_week"));
-        i.setAvgMonth(BaseDB.getDouble(c, "avg_month"));
-        i.setAvgSeason(BaseDB.getDouble(c, "avg_season"));
-        i.setAvgYear(BaseDB.getDouble(c, "avg_year"));
+        Val val = new Val();
+        i.setNet(val);
+        val.setOpen(BaseDB.getDouble(c, "open"));
+        val.setLatest(BaseDB.getDouble(c, "latest"));
+        val.setHigh(BaseDB.getDouble(c, "high"));
+        val.setLow(BaseDB.getDouble(c, "low"));
+        Avg avg = new Avg();
+        i.setAvg(avg);
+        avg.setWeek(BaseDB.getDouble(c, "avg_week"));
+        avg.setMonth(BaseDB.getDouble(c, "avg_month"));
+        avg.setSeason(BaseDB.getDouble(c, "avg_season"));
+        avg.setYear(BaseDB.getDouble(c, "avg_year"));
         return i;
     };
     private final DB db = DB.create("nature/stock.db");
@@ -64,9 +71,13 @@ public class NetMapper {
     private int doBatchMerge(List<Net> list) {
         SqlBuilder param = SqlBuilder.build().append("REPLACE INTO net(").append(COLUMNS).append(")VALUES ")
                 .foreach(list, null, null, ",", (d, sqlParam) -> {
+                    Val val = d.getNet();
+                    Avg avg = d.getAvg();
                     sqlParam.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", d.getCode(), d.getMarket(), d.getDate(),
-                            d.getOpen(), d.getLatest(), d.getHigh(), d.getLow(), d.getAvgWeek(), d.getAvgMonth(),
-                            d.getAvgSeason(), d.getAvgYear());
+                            val == null ? null : val.getOpen(), val == null ? null : val.getLatest(),
+                            val == null ? null : val.getHigh(), val == null ? null : val.getLow(),
+                            avg == null ? null : avg.getWeek(), avg == null ? null : avg.getMonth(),
+                            avg == null ? null : avg.getSeason(), avg == null ? null : avg.getYear());
                 });
         return db.executeUpdate(param);
     }

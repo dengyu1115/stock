@@ -46,7 +46,8 @@ public class ComponentStarter {
             if (loader == null) {
                 throw new RuntimeException("no context class loader");
             }
-            DexFile home = new DexFile(ctx.getPackageResourcePath());
+            String path = ctx.getPackageResourcePath();
+            DexFile home = new DexFile(path);
             Enumeration<String> entries = home.entries();
             while (entries.hasMoreElements()) {
                 String element = entries.nextElement();

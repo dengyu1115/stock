@@ -1,18 +1,21 @@
 package com.nature.stock.mapper;
 
 import android.database.Cursor;
+import com.nature.base.mapper.BaseKlineMapper;
+import com.nature.base.model.Avg;
+import com.nature.base.model.Kline;
+import com.nature.base.model.Val;
 import com.nature.common.db.BaseDB;
 import com.nature.common.db.DB;
 import com.nature.common.db.SqlBuilder;
 import com.nature.common.ioc.annotation.Component;
-import com.nature.stock.model.Kline;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class KlineMapper {
+public class KlineMapper implements BaseKlineMapper {
 
     private static final Function<Cursor, Kline> mapper = c -> {
         Kline i = new Kline();
@@ -20,20 +23,26 @@ public class KlineMapper {
         i.setName(BaseDB.getString(c, "name"));
         i.setDate(BaseDB.getString(c, "date"));
         i.setMarket(BaseDB.getString(c, "market"));
-        i.setPriceOpen(BaseDB.getDouble(c, "price_open"));
-        i.setPriceLatest(BaseDB.getDouble(c, "price_latest"));
-        i.setPriceHigh(BaseDB.getDouble(c, "price_high"));
-        i.setPriceLow(BaseDB.getDouble(c, "price_low"));
         i.setShare(BaseDB.getDouble(c, "share"));
         i.setAmount(BaseDB.getDouble(c, "amount"));
-        i.setOpen(BaseDB.getDouble(c, "open"));
-        i.setLatest(BaseDB.getDouble(c, "latest"));
-        i.setHigh(BaseDB.getDouble(c, "high"));
-        i.setLow(BaseDB.getDouble(c, "low"));
-        i.setAvgWeek(BaseDB.getDouble(c, "avg_week"));
-        i.setAvgMonth(BaseDB.getDouble(c, "avg_month"));
-        i.setAvgSeason(BaseDB.getDouble(c, "avg_season"));
-        i.setAvgYear(BaseDB.getDouble(c, "avg_year"));
+        Val price = new Val();
+        i.setPrice(price);
+        price.setOpen(BaseDB.getDouble(c, "price_open"));
+        price.setLatest(BaseDB.getDouble(c, "price_latest"));
+        price.setHigh(BaseDB.getDouble(c, "price_high"));
+        price.setLow(BaseDB.getDouble(c, "price_low"));
+        Val net = new Val();
+        i.setNet(net);
+        net.setOpen(BaseDB.getDouble(c, "open"));
+        net.setLatest(BaseDB.getDouble(c, "latest"));
+        net.setHigh(BaseDB.getDouble(c, "high"));
+        net.setLow(BaseDB.getDouble(c, "low"));
+        Avg avg = new Avg();
+        i.setAvg(avg);
+        avg.setWeek(BaseDB.getDouble(c, "avg_week"));
+        avg.setMonth(BaseDB.getDouble(c, "avg_month"));
+        avg.setSeason(BaseDB.getDouble(c, "avg_season"));
+        avg.setYear(BaseDB.getDouble(c, "avg_year"));
         return i;
     };
     private final DB db = DB.create("nature/stock.db");

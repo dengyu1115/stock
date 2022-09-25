@@ -9,5 +9,4 @@ public class ItemLine extends Item {
 
     private String date;
 
-    private Double latest;
 }

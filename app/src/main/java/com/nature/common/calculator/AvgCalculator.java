@@ -1,6 +1,7 @@
 package com.nature.common.calculator;
 
-import com.nature.stock.model.Net;
+import com.nature.base.model.Avg;
+import com.nature.base.model.Net;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,31 +24,42 @@ public class AvgCalculator {
         }
 
         private void cal() {
-            List<Avg> arr = Arrays.asList(new Avg(WEEK, Net::setAvgWeek), new Avg(MONTH, Net::setAvgMonth),
-                    new Avg(SEASON, Net::setAvgSeason), new Avg(YEAR, Net::setAvgYear));
+            List<Single> arr = Arrays.asList(
+                    new Single(WEEK, (i, v) -> this.setAvg(i, v, Avg::setWeek)),
+                    new Single(MONTH, (i, v) -> this.setAvg(i, v, Avg::setMonth)),
+                    new Single(SEASON, (i, v) -> this.setAvg(i, v, Avg::setSeason)),
+                    new Single(YEAR, (i, v) -> this.setAvg(i, v, Avg::setYear))
+            );
             for (Net net : list) {
-                for (Avg avg : arr) {
+                for (Single avg : arr) {
                     avg.push(net);
                 }
             }
         }
+
+        private void setAvg(Net i, Double v, BiConsumer<Avg, Double> consumer) {
+            if (i.getAvg() == null) {
+                i.setAvg(new Avg());
+            }
+            consumer.accept(i.getAvg(), v);
+        }
     }
 
-    private static class Avg {
+    private static class Single {
         private final int scale, length;
         private final Double[] arr;
         private final BiConsumer<Net, Double> handle;
         private int index;
         private double total;
 
-        private Avg(int scale, BiConsumer<Net, Double> handle) {
+        private Single(int scale, BiConsumer<Net, Double> handle) {
             this.scale = scale;
             this.arr = new Double[this.length = scale - 1];
             this.handle = handle;
         }
 
         private void push(Net net) {
-            Double latest = net.getLatest();
+            Double latest = net.getNet().getLatest();
             total += latest;
             index++;
             if (index == length) {
